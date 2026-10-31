@@ -215,7 +215,7 @@ try {
                 <div class="lbl">Total Capacity</div>
               </div>
               <div class="stat-seat-col">
-                <div class="val"><?php echo intval($ev["reg_count"]); ?></div>
+                <div class="val"><?php echo intval($ev["registered_count"]); ?></div>
                 <div class="lbl">Registered</div>
               </div>
               <div class="stat-seat-col highlight-remaining">
