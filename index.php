@@ -46,7 +46,7 @@ try {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Campus Event Registration Portal for IIT (ISM) Dhanbad. Real-time seat tracking, dynamic registration, and cancellation for campus festivals and technical competitions.">
-  <title>IIT (ISM) Dhanbad • Campus Event Registration Portal</title>
+  <title>IIT (ISM) Dhanbad - Campus Event Registration Portal</title>
   
   <!-- Custom CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
@@ -68,21 +68,21 @@ try {
 
       <nav class="nav-actions">
         <button class="btn-nav active" id="navAllEvents">
-          <span>🏛️</span> Events
+          Events
         </button>
         <button class="btn-nav" id="navMyRegistrations">
-          <span>🎟️</span> My Registrations
+          My Registrations
         </button>
         <span style="display: inline-flex; align-items: center; font-size: 12px; color: #fff; padding: 2px 6px; background: #555;">
-          👤 <?php echo $currentStudentName; ?> (<?php echo $currentAdmissionNo; ?>)
+          <?php echo $currentStudentName; ?> (<?php echo $currentAdmissionNo; ?>)
         </span>
         <?php if (!empty($_SESSION["isAdmin"])): ?>
         <a href="admin.php" class="btn-nav" style="text-decoration: none; display: inline-flex; align-items: center; background: #880000; color: #fff;">
-          ⚙️ Admin Panel
+          Admin Panel
         </a>
         <?php endif; ?>
         <a href="logout.php" class="btn-nav" style="text-decoration: none; display: inline-flex; align-items: center;">
-          🚪 Logout
+          Logout
         </a>
       </nav>
     </div>
@@ -133,11 +133,9 @@ try {
           <!-- Venue & Timing Meta -->
           <div class="event-meta-list">
             <div class="meta-item">
-              <span class="meta-icon">📅</span>
               <span><strong>Date:</strong> <?php echo $formattedDate; ?> • <?php echo $formattedTime; ?></span>
             </div>
             <div class="meta-item">
-              <span class="meta-icon">📍</span>
               <span><strong>Venue:</strong> <?php echo htmlspecialchars($event["venue"]); ?></span>
             </div>
           </div>
@@ -169,7 +167,7 @@ try {
         <!-- Card Action Buttons -->
         <div class="card-footer">
           <button class="btn-register" id="btn-reg-<?php echo $event["id"]; ?>" <?php echo $isFull ? 'disabled' : ''; ?> onclick="openRegistrationModal(<?php echo $event["id"]; ?>)">
-            <?php echo $isFull ? '🚫 Event Full' : '🎟️ Register Now'; ?>
+            <?php echo $isFull ? 'Event Full' : 'Register Now'; ?>
           </button>
           <button class="btn-cancel-seat" onclick="openQuickCancelModal(<?php echo $event["id"]; ?>, '<?php echo htmlspecialchars(addslashes($event["title"])); ?>')">
             Cancel Seat
@@ -221,7 +219,7 @@ try {
           <div class="modal-footer">
             <button type="button" class="btn-secondary btn-modal-close">Cancel</button>
             <button type="submit" class="btn-primary" id="btnSubmitReg">
-              <span>🎟️</span> Confirm Registration
+              Confirm Registration
             </button>
           </div>
         </form>
@@ -277,14 +275,13 @@ try {
         <div class="lookup-bar">
           <input type="text" class="form-control" id="lookupAdmissionNo" value="<?php echo $currentAdmissionNo; ?>" placeholder="Enter Admission Number (e.g. 24JE0101, 24JE0917)">
           <button class="btn-primary" id="btnLookupReg" style="white-space: nowrap;">
-            <span>🔍</span> Find My Events
+            Find My Events
           </button>
         </div>
 
         <!-- Registrations Container -->
         <div id="myRegistrationsList">
           <div class="empty-state">
-            <div class="empty-icon">🎟️</div>
             <h4>View or Manage Registrations</h4>
             <p>Enter your IIT (ISM) Admission Number above to view all events you are booked for and release seats if needed.</p>
           </div>

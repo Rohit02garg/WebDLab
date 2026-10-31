@@ -85,7 +85,7 @@ try {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard • IIT (ISM) Dhanbad</title>
+  <title>Admin Dashboard - IIT (ISM) Dhanbad</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -103,7 +103,7 @@ try {
 
       <nav class="nav-actions">
         <a href="logout.php" class="btn-nav" style="text-decoration: none;">
-          🚪 Logout
+          Logout
         </a>
       </nav>
     </div>
@@ -192,18 +192,16 @@ try {
                  onclick="return confirm('Are you sure you want to delete this event? All its registrations will be deleted too.');"
                  class="btn-cancel-reg" 
                  style="text-decoration: none; display: inline-block; padding: 4px 10px; font-size: 12px; white-space: nowrap;">
-                🗑️ Delete
+                Delete
               </a>
             </div>
           </div>
 
           <div class="event-meta-list">
             <div class="meta-item">
-              <span>📅</span>
               <span><strong>Date:</strong> <?php echo $dt->format("M d, Y • h:i A"); ?></span>
             </div>
             <div class="meta-item">
-              <span>📍</span>
               <span><strong>Venue:</strong> <?php echo htmlspecialchars($ev["venue"]); ?></span>
             </div>
           </div>
