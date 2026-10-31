@@ -297,9 +297,10 @@ try {
   </div>
 
   <!-- =========================================================================
-       Client Scripts: jQuery 3.7.1 & Main App Logic
+       Client Scripts: jQuery 3.7.1 & Main App Logic (Lab 8 Section 6.1)
        ========================================================================= -->
-  <script src="assets/js/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>window.jQuery || document.write('<script src="assets/js/jquery.min.js"><\/script>');</script>
   <script>
     window.sessionStudent = {
       admissionNo: <?php echo json_encode($_SESSION["admissionNo"]); ?>,

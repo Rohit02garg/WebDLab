@@ -1,11 +1,14 @@
-// Campus Event Registration System - Client-Side Logic (jQuery & AJAX)
+// NCSM301 Web Development Laboratory
+// Lab 8: Asynchronous Data Exchange and jQuery
+// Student & Event Registration Client Logic
 
 var currentEvents = [];
 
+// Initialize event handlers once DOM is ready (Lab 8 Section 6.1)
 $(document).ready(function() {
   loadEvents();
 
-  // Navigation: My Registrations
+  // Navigation: My Registrations handler (Lab 8 Section 7.3)
   $("#navMyRegistrations").on("click", function(e) {
     e.preventDefault();
     var adm = (window.sessionStudent && window.sessionStudent.admissionNo) ? window.sessionStudent.admissionNo : "";
@@ -24,76 +27,19 @@ $(document).ready(function() {
     }
   });
 
-  // Event Registration Submission
+  // Form submission: Event Registration with fetch POST (Lab 8 Section 5)
   $("#registrationForm").on("submit", function(e) {
     e.preventDefault();
-    var $btn = $("#btnSubmitReg");
-    $btn.prop("disabled", true).text("Registering...");
-    $("#regAlert").hide();
-
-    $.ajax({
-      url: "api/register.php",
-      method: "POST",
-      data: $(this).serialize(),
-      dataType: "json",
-      success: function(res) {
-        if (res.success) {
-          closeAllModals();
-          alert(res.message || "Registration successful!");
-          loadEvents();
-        } else {
-          $("#regAlert").text(res.message).show();
-        }
-      },
-      error: function(xhr) {
-        var msg = (xhr.responseJSON && xhr.responseJSON.message) ? xhr.responseJSON.message : "Registration failed.";
-        $("#regAlert").text(msg).show();
-      },
-      complete: function() {
-        $btn.prop("disabled", false).text("Confirm Registration");
-      }
-    });
+    submitRegistration();
   });
 
-  // Quick Cancel Seat Submission
+  // Form submission: Cancel Seat with fetch POST (Lab 8 Section 5)
   $("#quickCancelForm").on("submit", function(e) {
     e.preventDefault();
-    var eventId = $("#quickCancelEventId").val();
-    var admNo = $("#quickCancelAdmissionNo").val().trim();
-
-    if (!admNo) {
-      $("#quickCancelAlert").text("Please enter your admission number.").show();
-      return;
-    }
-
-    var $btn = $("#btnSubmitQuickCancel");
-    $btn.prop("disabled", true).text("Cancelling...");
-
-    $.ajax({
-      url: "api/cancel.php",
-      method: "POST",
-      data: { event_id: eventId, admission_no: admNo },
-      dataType: "json",
-      success: function(res) {
-        if (res.success) {
-          closeAllModals();
-          alert(res.message || "Seat cancelled successfully.");
-          loadEvents();
-        } else {
-          $("#quickCancelAlert").text(res.message).show();
-        }
-      },
-      error: function(xhr) {
-        var msg = (xhr.responseJSON && xhr.responseJSON.message) ? xhr.responseJSON.message : "Cancellation failed.";
-        $("#quickCancelAlert").text(msg).show();
-      },
-      complete: function() {
-        $btn.prop("disabled", false).text("Confirm Cancellation");
-      }
-    });
+    submitQuickCancel();
   });
 
-  // Modal Close Handlers
+  // Modal close handlers (Lab 8 Section 7.3 & 7.4)
   $(".modal-close-btn, .btn-modal-close").on("click", function() {
     closeAllModals();
   });
@@ -111,17 +57,27 @@ $(document).ready(function() {
   });
 });
 
-// Load events from server via GET AJAX
+// Lab 8 Section 3: Receiving Data with fetch (GET)
 function loadEvents() {
-  $.get("api/get_events.php", function(res) {
-    if (res.success) {
-      currentEvents = res.events;
-      renderEvents(res.events);
-    }
-  }, "json");
+  fetch("api/get_events.php")
+    .then(function(response) {
+      if (!response.ok) {
+        throw new Error("HTTP " + response.status);
+      }
+      return response.json();
+    })
+    .then(function(data) {
+      if (data.success) {
+        currentEvents = data.events;
+        renderEvents(data.events);
+      }
+    })
+    .catch(function(error) {
+      console.log("Could not load events: " + error.message);
+    });
 }
 
-// Render event cards list
+// Render event list using jQuery DOM methods
 function renderEvents(events) {
   var $grid = $("#eventsGrid");
   $grid.empty();
@@ -182,6 +138,48 @@ function openRegistrationModal(eventId) {
   openModal("#registrationModal");
 }
 
+// Lab 8 Section 5: Sending Data with fetch (POST JSON)
+function submitRegistration() {
+  var $btn = $("#btnSubmitReg");
+  $btn.prop("disabled", true).text("Registering...");
+  $("#regAlert").hide();
+
+  var payload = {
+    event_id: parseInt($("#regEventId").val(), 10),
+    student_name: $("#regStudentName").val(),
+    admission_no: $("#regAdmissionNo").val(),
+    email: $("#regEmail").val(),
+    phone: $("#regPhone").val(),
+    department: $("#regDepartment").val()
+  };
+
+  fetch("api/register.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      if (data.success) {
+        closeAllModals();
+        alert(data.message || "Registration accepted!");
+        loadEvents();
+      } else {
+        $("#regAlert").text(data.message || "Registration could not be completed.").show();
+      }
+    })
+    .catch(function(error) {
+      $("#regAlert").text("Network or server error. Try again.").show();
+    })
+    .finally(function() {
+      $btn.prop("disabled", false).text("Confirm Registration");
+    });
+}
+
 // Open Quick Cancel Modal
 function openQuickCancelModal(eventId, title) {
   $("#quickCancelEventId").val(eventId);
@@ -195,53 +193,125 @@ function openQuickCancelModal(eventId, title) {
   openModal("#quickCancelModal");
 }
 
-// Fetch student's registered events
+// Submit Cancellation with fetch POST (Lab 8 Section 5)
+function submitQuickCancel() {
+  var eventId = parseInt($("#quickCancelEventId").val(), 10);
+  var admNo = $("#quickCancelAdmissionNo").val().trim();
+
+  if (!admNo) {
+    $("#quickCancelAlert").text("Please enter your Admission Number.").show();
+    return;
+  }
+
+  var $btn = $("#btnSubmitQuickCancel");
+  $btn.prop("disabled", true).text("Cancelling...");
+
+  var payload = {
+    event_id: eventId,
+    admission_no: admNo
+  };
+
+  fetch("api/cancel.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      if (data.success) {
+        closeAllModals();
+        alert(data.message || "Registration cancelled.");
+        loadEvents();
+      } else {
+        $("#quickCancelAlert").text(data.message || "Cancellation could not be completed.").show();
+      }
+    })
+    .catch(function(error) {
+      $("#quickCancelAlert").text("Network or server error. Try again.").show();
+    })
+    .finally(function() {
+      $btn.prop("disabled", false).text("Confirm Cancellation");
+    });
+}
+
+// Fetch student's registered events using fetch GET
 function fetchMyRegistrations(adm) {
   var $list = $("#myRegistrationsList");
   $list.html('<p style="text-align: center; color: #666;">Loading registrations...</p>');
 
-  $.get("api/my_registrations.php", { admission_no: adm }, function(res) {
-    $list.empty();
-    if (!res.success || !res.registrations || res.registrations.length === 0) {
-      $list.html('<p style="text-align: center; color: #666;">No active registrations found for ' + escapeHtml(adm) + '.</p>');
-      return;
-    }
+  fetch("api/my_registrations.php?admission_no=" + encodeURIComponent(adm))
+    .then(function(response) {
+      if (!response.ok) {
+        throw new Error("HTTP " + response.status);
+      }
+      return response.json();
+    })
+    .then(function(data) {
+      $list.empty();
+      if (!data.success || !data.registrations || data.registrations.length === 0) {
+        $list.html('<p style="text-align: center; color: #666;">No active registrations found for ' + escapeHtml(adm) + '.</p>');
+        return;
+      }
 
-    res.registrations.forEach(function(r) {
-      var itemHtml = 
-        '<div class="reg-card">' +
-          '<div class="reg-info">' +
-            '<h4>' + escapeHtml(r.event_title) + '</h4>' +
-            '<div class="reg-details">' +
-              '<span>' + r.event_date + ' • ' + r.event_time + '</span> | <span>' + escapeHtml(r.venue) + '</span>' +
+      data.registrations.forEach(function(r) {
+        var itemHtml = 
+          '<div class="reg-card">' +
+            '<div class="reg-info">' +
+              '<h4>' + escapeHtml(r.event_title) + '</h4>' +
+              '<div class="reg-details">' +
+                '<span>' + r.event_date + ' • ' + r.event_time + '</span> | <span>' + escapeHtml(r.venue) + '</span>' +
+              '</div>' +
             '</div>' +
-          '</div>' +
-          '<div>' +
-            '<button type="button" class="btn-cancel-reg" onclick="cancelRegistration(' + r.event_id + ', \'' + escapeHtml(r.admission_no) + '\')">Cancel Registration</button>' +
-          '</div>' +
-        '</div>';
-      $list.append(itemHtml);
+            '<div>' +
+              '<button type="button" class="btn-cancel-reg" onclick="cancelRegistration(' + r.event_id + ', \'' + escapeHtml(r.admission_no) + '\')">Cancel Registration</button>' +
+            '</div>' +
+          '</div>';
+        $list.append(itemHtml);
+      });
+    })
+    .catch(function(error) {
+      $list.html('<p style="color: red; text-align: center;">Could not load registrations. Try again.</p>');
     });
-  }, "json").fail(function() {
-    $list.html('<p style="color: red; text-align: center;">Could not load registrations.</p>');
-  });
 }
 
 // Cancel registration from My Registrations list
 function cancelRegistration(eventId, admNo) {
   if (!confirm("Are you sure you want to cancel this registration?")) return;
 
-  $.post("api/cancel.php", { event_id: eventId, admission_no: admNo }, function(res) {
-    if (res.success) {
-      alert("Registration cancelled.");
-      fetchMyRegistrations(admNo);
-      loadEvents();
-    } else {
-      alert(res.message || "Failed to cancel.");
-    }
-  }, "json");
+  var payload = {
+    event_id: eventId,
+    admission_no: admNo
+  };
+
+  fetch("api/cancel.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      if (data.success) {
+        alert("Registration cancelled.");
+        fetchMyRegistrations(admNo);
+        loadEvents();
+      } else {
+        alert(data.message || "Failed to cancel.");
+      }
+    })
+    .catch(function(error) {
+      alert("Network error while cancelling.");
+    });
 }
 
+// Showing / hiding modal elements (Lab 8 Section 7.4)
 function openModal(id) {
   $(id).addClass("open");
   $("body").css("overflow", "hidden");
@@ -252,6 +322,7 @@ function closeAllModals() {
   $("body").css("overflow", "auto");
 }
 
+// Escape HTML utility for safe rendering
 function escapeHtml(str) {
   if (!str) return "";
   return String(str)
