@@ -24,9 +24,9 @@ CREATE TABLE `students` (
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Seed Admin Account (Login: 24JE0001 / admin123)
+-- Seed Admin Account (Login: Admin / admin123)
 INSERT INTO `students` (`admission_no`, `student_name`, `email`, `phone`, `department`, `password`, `role`) VALUES
-('24JE0001', 'Admin Officer', 'admin.24je0001@iitism.ac.in', '9876543200', 'Administration', '$2y$10$gn2eIcRadTtQIjDva1PfpOFOb4/USs2YTOR1pnzCsO4.KE3E9D/8q', 'admin');
+('ADMIN', 'Administrator', 'admin@iitism.ac.in', '0000000000', 'Administration', '$2y$10$qi5pQp5hbXykOoXqOVu7Ju4BDg7A/tSszkGVbI7ncI5h5AxAv4a7u', 'admin');
 
 -- --------------------------------------------------------
 -- Table structure for `events`
