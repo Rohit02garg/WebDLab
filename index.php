@@ -76,6 +76,11 @@ try {
         <span style="display: inline-flex; align-items: center; font-size: 12px; color: #fff; padding: 2px 6px; background: #555;">
           👤 <?php echo $currentStudentName; ?> (<?php echo $currentAdmissionNo; ?>)
         </span>
+        <?php if (!empty($_SESSION["isAdmin"])): ?>
+        <a href="admin.php" class="btn-nav" style="text-decoration: none; display: inline-flex; align-items: center; background: #880000; color: #fff;">
+          ⚙️ Admin Panel
+        </a>
+        <?php endif; ?>
         <a href="logout.php" class="btn-nav" style="text-decoration: none; display: inline-flex; align-items: center;">
           🚪 Logout
         </a>

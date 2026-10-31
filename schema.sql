@@ -20,8 +20,13 @@ CREATE TABLE `students` (
   `phone` VARCHAR(20) NOT NULL,
   `department` VARCHAR(100) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
+  `role` VARCHAR(20) DEFAULT 'student',
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Seed Admin Account (Login: ADMIN / admin123)
+INSERT INTO `students` (`admission_no`, `student_name`, `email`, `phone`, `department`, `password`, `role`) VALUES
+('ADMIN', 'Portal Admin', 'admin@iitism.ac.in', '0000000000', 'Administration', '$2y$10$9TDKvZ4mr4rJTV5KuQKA8OCYx0fzrVohOZhRaqJf5kaPO9Y65lpNm', 'admin');
 
 -- --------------------------------------------------------
 -- Table structure for `events`

@@ -30,7 +30,7 @@ $admissionNo = strtoupper($admissionNo);
 
 // Extra Lab: Look up student in database using PDO prepared statement
 try {
-    $stmt = $pdo->prepare("SELECT admission_no, student_name, email, phone, department, password FROM students WHERE admission_no = :adm LIMIT 1");
+    $stmt = $pdo->prepare("SELECT admission_no, student_name, email, phone, department, password, role FROM students WHERE admission_no = :adm LIMIT 1");
     $stmt->execute([":adm" => $admissionNo]);
     $student = $stmt->fetch();
 
@@ -46,15 +46,20 @@ try {
         exit;
     }
 
-    // Lab 10 Section 6.2: Store all student profile fields in session
+    // Lab 10 Section 6.2: Store student profile fields and admin flag in session
     $_SESSION["admissionNo"]       = $student["admission_no"];
     $_SESSION["studentName"]       = $student["student_name"];
     $_SESSION["studentEmail"]      = $student["email"];
     $_SESSION["studentPhone"]      = $student["phone"];
     $_SESSION["studentDepartment"] = $student["department"];
+    $_SESSION["isAdmin"]           = ($student["role"] === "admin");
 
-    // Lab 10 Section 7.4: Redirect to main events portal after storing session
-    header("Location: index.php");
+    // Redirect admin to admin dashboard; students to index.php
+    if (!empty($_SESSION["isAdmin"])) {
+        header("Location: admin.php");
+    } else {
+        header("Location: index.php");
+    }
     exit;
 
 } catch (PDOException $e) {

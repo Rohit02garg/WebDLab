@@ -39,7 +39,7 @@ $success = isset($_GET["success"]) ? trim($_GET["success"]) : "";
   <main class="page-container" style="max-width: 420px; margin-top: 30px;">
     <div class="controls-card">
       <h2 style="margin-top: 0; font-size: 18px; border-bottom: 1px solid #ccc; padding-bottom: 8px;">
-        Student Login
+        Portal Login
       </h2>
 
       <!-- Lab 10 Section 5.2: Display messages safely with htmlspecialchars -->
@@ -66,7 +66,7 @@ $success = isset($_GET["success"]) ? trim($_GET["success"]) : "";
             class="form-control"
             id="admissionNo"
             name="admissionNo"
-            placeholder="e.g. 24JE0917"
+            placeholder="e.g. 24JE0917 or ADMIN"
             required
             autofocus
           >
