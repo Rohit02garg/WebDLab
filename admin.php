@@ -102,9 +102,6 @@ try {
       </div>
 
       <nav class="nav-actions">
-        <a href="index.php" class="btn-nav" style="text-decoration: none;">
-          🏛️ Student View
-        </a>
         <a href="logout.php" class="btn-nav" style="text-decoration: none;">
           🚪 Logout
         </a>
