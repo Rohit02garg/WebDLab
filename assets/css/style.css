@@ -1,7 +1,4 @@
-/* ==========================================================================
-   Campus Event Registration System - IIT (ISM) Dhanbad
-   Simple Basic Entry Level CSS
-   ========================================================================== */
+/* Campus Event Registration System - Minimal Entry-Level CSS */
 
 * {
   box-sizing: border-box;
@@ -15,7 +12,7 @@ body {
   color: #333;
 }
 
-/* Header & Navigation */
+/* Header & Top Bar */
 .top-bar {
   background: #333;
   color: #fff;
@@ -65,6 +62,7 @@ body {
   border: 1px solid #777;
   padding: 5px 10px;
   cursor: pointer;
+  font-size: 13px;
 }
 
 .btn-nav.active {
@@ -72,7 +70,7 @@ body {
   border-color: #000;
 }
 
-/* Main Container */
+/* Layout */
 .page-container,
 .main-wrapper {
   max-width: 860px;
@@ -80,15 +78,13 @@ body {
   padding: 0 15px;
 }
 
-/* Search & Filters */
 .controls-card {
   background: #fff;
   border: 1px solid #ccc;
-  padding: 10px;
+  padding: 14px;
   margin-bottom: 15px;
 }
 
-/* Events Header & Grid */
 .events-section-header {
   display: flex;
   justify-content: space-between;
@@ -106,6 +102,7 @@ body {
   color: #666;
 }
 
+/* Event Cards (Single Full Width Queue) */
 .events-grid {
   display: flex;
   flex-direction: column;
@@ -117,7 +114,6 @@ body {
   border: 1px solid #ccc;
   padding: 16px;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .event-card.is-full {
@@ -149,9 +145,6 @@ body {
 
 .meta-item {
   margin: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .seat-capacity-block {
@@ -164,7 +157,6 @@ body {
 .seat-stats-row {
   display: flex;
   gap: 40px;
-  text-align: left;
   margin-bottom: 8px;
 }
 
@@ -174,7 +166,6 @@ body {
 }
 
 .stat-seat-col.highlight-remaining .val { color: green; }
-.stat-seat-col.highlight-remaining.fast .val { color: orange; }
 .stat-seat-col.highlight-remaining.full .val { color: red; }
 
 .stat-seat-col .lbl {
@@ -193,8 +184,9 @@ body {
   background: green;
 }
 
-.progress-bar-fill.fast { background: orange; }
-.progress-bar-fill.full { background: red; }
+.progress-bar-fill.full {
+  background: red;
+}
 
 .card-footer {
   display: flex;
@@ -205,7 +197,7 @@ body {
 /* Buttons */
 button {
   cursor: pointer;
-  padding: 5px 10px;
+  padding: 6px 12px;
   font-size: 13px;
 }
 
@@ -240,6 +232,40 @@ button {
   border: 1px solid red;
 }
 
+/* Forms */
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.form-help {
+  font-size: 11px;
+  color: #777;
+}
+
+.req {
+  color: red;
+}
+
 /* Modals */
 .modal-backdrop {
   display: none;
@@ -261,12 +287,8 @@ button {
   background: #fff;
   border: 1px solid #333;
   max-width: 480px;
-  margin: 30px auto;
+  margin: 40px auto;
   padding: 15px;
-}
-
-.registrations-modal-dialog {
-  max-width: 600px;
 }
 
 .modal-header {
@@ -290,16 +312,13 @@ button {
   cursor: pointer;
 }
 
-.modal-body {
-  margin-bottom: 10px;
-}
-
 .modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
   border-top: 1px solid #ccc;
   padding-top: 8px;
+  margin-top: 10px;
 }
 
 .modal-event-summary {
@@ -313,58 +332,24 @@ button {
   display: none;
   padding: 8px;
   margin-bottom: 10px;
-  border: 1px solid;
-}
-
-.modal-alert.error {
-  display: block;
+  border: 1px solid red;
   color: red;
-  border-color: red;
   background: #ffe6e6;
 }
 
 .modal-alert.success {
-  display: block;
-  color: green;
   border-color: green;
+  color: green;
   background: #e6ffe6;
 }
 
-/* Forms */
-.form-group {
-  margin-bottom: 10px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 12px;
-  font-weight: bold;
-  margin-bottom: 2px;
-}
-
-.form-control {
-  width: 100%;
-  padding: 5px;
-  border: 1px solid #ccc;
-  font-size: 13px;
-}
-
-.form-row-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.form-help {
-  font-size: 11px;
-  color: #777;
-}
-
-.req {
+.modal-alert.error {
+  border-color: red;
   color: red;
+  background: #ffe6e6;
 }
 
-/* My Registrations List */
+/* My Registrations Modal Drawer */
 .lookup-bar {
   display: flex;
   gap: 8px;
@@ -373,7 +358,7 @@ button {
 
 .reg-card {
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 8px 12px;
   margin-bottom: 8px;
   display: flex;
   justify-content: space-between;
@@ -388,48 +373,31 @@ button {
 .reg-details {
   font-size: 12px;
   color: #555;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
 }
 
-.empty-state {
-  text-align: center;
-  padding: 20px;
-  color: #666;
+/* Tables (Lab Manual Standard) */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 13px;
 }
 
-/* Toasts */
-.toast-container {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  z-index: 1000;
+table, th, td {
+  border: 1px solid #ccc;
 }
 
-.toast {
-  background: #fff;
-  border: 1px solid #333;
-  padding: 8px 12px;
-  margin-top: 5px;
-  font-size: 12px;
+th, td {
+  padding: 6px 8px;
+  text-align: left;
 }
 
-.toast.error {
-  border-color: red;
-  color: red;
-}
-
-.toast.success {
-  border-color: green;
-  color: green;
+th {
+  background: #eee;
 }
 
 /* Responsive */
 @media (max-width: 600px) {
-  .events-grid {
-    grid-template-columns: 1fr;
-  }
   .form-row-2 {
     grid-template-columns: 1fr;
   }

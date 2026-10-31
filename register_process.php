@@ -12,24 +12,32 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 }
 
 // Lab 10 Section 5.1: Read and trim all POST values using isset ternary
-$admissionNo     = isset($_POST["admissionNo"])       ? trim($_POST["admissionNo"])       : "";
-$studentName     = isset($_POST["studentName"])       ? trim($_POST["studentName"])       : "";
-$studentEmail    = isset($_POST["studentEmail"])      ? trim($_POST["studentEmail"])      : "";
-$studentPhone    = isset($_POST["studentPhone"])      ? trim($_POST["studentPhone"])      : "";
-$studentDept     = isset($_POST["studentDepartment"]) ? trim($_POST["studentDepartment"]) : "";
-$password        = isset($_POST["studentPassword"])   ? $_POST["studentPassword"]         : "";
-$confirmPassword = isset($_POST["confirmPassword"])   ? $_POST["confirmPassword"]         : "";
+$admissionNo = isset($_POST["admissionNo"]) ? trim($_POST["admissionNo"]) : "";
+$studentName = isset($_POST["studentName"]) ? trim($_POST["studentName"]) : "";
+$studentEmail = isset($_POST["studentEmail"]) ? trim($_POST["studentEmail"]) : "";
+$studentPhone = isset($_POST["studentPhone"]) ? trim($_POST["studentPhone"]) : "";
+$studentDept = isset($_POST["studentDepartment"]) ? trim($_POST["studentDepartment"]) : "";
+$password = isset($_POST["studentPassword"]) ? $_POST["studentPassword"] : "";
+$confirmPassword = isset($_POST["confirmPassword"]) ? $_POST["confirmPassword"] : "";
 
 // Validate all required fields are present
 $errors = [];
-if ($admissionNo  === "") $errors[] = "Admission Number is required.";
-if ($studentName  === "") $errors[] = "Full Name is required.";
-if ($studentEmail === "") $errors[] = "Email is required.";
-if ($studentPhone === "") $errors[] = "Mobile Number is required.";
-if ($studentDept  === "") $errors[] = "Department is required.";
-if ($password     === "") $errors[] = "Password is required.";
-if (strlen($password) < 4) $errors[] = "Password must be at least 4 characters.";
-if ($password !== $confirmPassword) $errors[] = "Passwords do not match.";
+if ($admissionNo === "")
+    $errors[] = "Admission Number is required.";
+if ($studentName === "")
+    $errors[] = "Full Name is required.";
+if ($studentEmail === "")
+    $errors[] = "Email is required.";
+if ($studentPhone === "")
+    $errors[] = "Mobile Number is required.";
+if ($studentDept === "")
+    $errors[] = "Department is required.";
+if ($password === "")
+    $errors[] = "Password is required.";
+if (strlen($password) < 4)
+    $errors[] = "Password must be at least 4 characters.";
+if ($password !== $confirmPassword)
+    $errors[] = "Passwords do not match.";
 
 if (!empty($errors)) {
     header("Location: register.php?error=" . urlencode(implode(" ", $errors)));
@@ -59,12 +67,12 @@ try {
         VALUES (:adm, :name, :email, :phone, :dept, :pass)
     ");
     $stmt->execute([
-        ":adm"   => $admissionNo,
-        ":name"  => $studentName,
+        ":adm" => $admissionNo,
+        ":name" => $studentName,
         ":email" => $studentEmail,
         ":phone" => $studentPhone,
-        ":dept"  => $studentDept,
-        ":pass"  => $hashedPassword
+        ":dept" => $studentDept,
+        ":pass" => $hashedPassword
     ]);
 
     // Redirect to login page with success message
@@ -82,4 +90,3 @@ try {
     exit;
 }
 ?>
-

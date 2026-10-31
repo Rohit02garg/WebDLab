@@ -49,7 +49,7 @@ try {
   <title>IIT (ISM) Dhanbad • Campus Event Registration Portal</title>
   
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="assets/css/style.css?v=<?php echo time(); ?>">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
@@ -297,15 +297,9 @@ try {
   </div>
 
   <!-- =========================================================================
-       Toast Notification System Container
-       ========================================================================= -->
-  <div class="toast-container" id="toastContainer"></div>
-
-  <!-- =========================================================================
        Client Scripts: jQuery 3.7.1 & Main App Logic
        ========================================================================= -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script>window.jQuery || document.write('<script src="assets/js/jquery.min.js"><\/script>');</script>
+  <script src="assets/js/jquery.min.js"></script>
   <script>
     window.sessionStudent = {
       admissionNo: <?php echo json_encode($_SESSION["admissionNo"]); ?>,
@@ -315,6 +309,6 @@ try {
       department: <?php echo json_encode($_SESSION["studentDepartment"] ?? ""); ?>
     };
   </script>
-  <script src="assets/js/app.js?v=<?php echo time(); ?>"></script>
+  <script src="assets/js/app.js"></script>
 </body>
 </html>
