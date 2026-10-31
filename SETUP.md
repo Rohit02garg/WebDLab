@@ -78,3 +78,4 @@ To publish new campus events, delete events, or view registered students:
   * `api/register.php` — Registers a student, prevents duplicate bookings, and enforces maximum capacity.
   * `api/cancel.php` — Releases a student's reserved seat.
   * `api/my_registrations.php` — Retrieves all booked events for a student.
+
