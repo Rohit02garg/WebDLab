@@ -76,7 +76,7 @@ $success = isset($_GET["success"]) ? trim($_GET["success"]) : "";
             required
             autofocus
           >
-          <div class="form-help">e.g. 24JE0917, 22JE0456</div>
+          <div class="form-help">e.g. 24JE0917, 24JE0456</div>
         </div>
 
         <!-- Full Name -->

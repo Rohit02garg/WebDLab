@@ -46,7 +46,7 @@ if ($studentName === "" || strlen($studentName) < 2) {
 }
 
 if ($admissionNo === "" || strlen($admissionNo) < 4) {
-    $errors[] = "Valid Admission Number / Roll No is required (e.g., 22JE0456).";
+    $errors[] = "Valid Admission Number / Roll No is required (e.g., 24JE0456).";
 }
 
 if ($email === "" || !filter_var($email, FILTER_VALIDATE_EMAIL)) {

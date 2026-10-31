@@ -66,7 +66,7 @@ $success = isset($_GET["success"]) ? trim($_GET["success"]) : "";
             class="form-control"
             id="admissionNo"
             name="admissionNo"
-            placeholder="e.g. 24JE0917 or ADMIN"
+            placeholder="e.g. 24JE0917"
             required
             autofocus
           >

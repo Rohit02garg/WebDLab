@@ -24,14 +24,13 @@ CREATE TABLE `students` (
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Seed Admin Account (Login: ADMIN / admin123)
+-- Seed Admin Account (Login: 24JE0001 / admin123)
 INSERT INTO `students` (`admission_no`, `student_name`, `email`, `phone`, `department`, `password`, `role`) VALUES
-('ADMIN', 'Portal Admin', 'admin@iitism.ac.in', '0000000000', 'Administration', '$2y$10$9TDKvZ4mr4rJTV5KuQKA8OCYx0fzrVohOZhRaqJf5kaPO9Y65lpNm', 'admin');
+('24JE0001', 'Admin Officer', 'admin.24je0001@iitism.ac.in', '9876543200', 'Administration', '$2y$10$gn2eIcRadTtQIjDva1PfpOFOb4/USs2YTOR1pnzCsO4.KE3E9D/8q', 'admin');
 
 -- --------------------------------------------------------
 -- Table structure for `events`
 -- --------------------------------------------------------
-
 CREATE TABLE `events` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `title` VARCHAR(255) NOT NULL,
@@ -71,7 +70,7 @@ INSERT INTO `events` (`id`, `title`, `category`, `description`, `date_time`, `ve
 (3, 'Khanan: Geo-Mining AI Hackathon', 'Technical', 'Solve real-world resource extraction, subsurface imaging, and mine safety challenges using computer vision, sensor telemetry, and modern AI.', '2026-11-22 09:30:00', 'GJLT Hall 1', 25),
 (4, 'CodeISM Winter Coding Sprint', 'Technical', 'Speed algorithmic problem solving challenge across dynamic programming, graph algorithms, and competitive data structures.', '2026-11-25 14:00:00', 'Computer Centre Lab 3', 20),
 (5, 'Basant: Kavyanjali Poetry Slam', 'Literary', 'A soulful evening celebrating Urdu, Hindi, and English poetry, ghazals, and spoken word recitals alongside esteemed alumni and poets.', '2026-12-01 17:30:00', 'Central Library Audi', 40),
-(6, 'Parakram: Inter-Hostel Badminton Clash', 'Sports', 'Singles and doubles knockout tournament featuring fierce rivalries between Aquamarine, Amber, Jasper, and Diamond hostels.', '2026-12-05 16:00:00', 'SAC Sports Complex', 6),
+(6, 'Parakram: Inter-Hostel Badminton Clash', 'Sports', 'Singles and doubles knockout tournament featuring fierce rivalries between campus teams.', '2026-12-05 16:00:00', 'SAC Sports Complex', 6),
 (7, 'Pratibimb: "The Miner\'s Legacy" Play', 'Cultural', 'A gripping theatrical production portraying the poignant history, perseverance, and camaraderie of the Dhanbad coal mining pioneers.', '2026-12-10 19:00:00', 'Penman Auditorium', 50),
 (8, 'E-Summit: Angel Pitch Arena', 'Entrepreneurship', 'Early-stage student startups pitch directly to prominent venture capitalists, alumni angels, and startup incubators.', '2026-12-14 11:00:00', 'EDC Seminar Hall', 4);
 
@@ -80,23 +79,23 @@ INSERT INTO `events` (`id`, `title`, `category`, `description`, `date_time`, `ve
 -- --------------------------------------------------------
 -- Event 6 (Capacity 6, 5 registrations already - 1 remaining seat!)
 INSERT INTO `registrations` (`event_id`, `student_name`, `admission_no`, `email`, `phone`, `department`) VALUES
-(6, 'Aarav Sharma', '22JE0101', 'aarav.sharma@iitism.ac.in', '9876543210', 'Computer Science & Engineering'),
-(6, 'Rohan Verma', '22JE0145', 'rohan.verma@iitism.ac.in', '9876543211', 'Mining Engineering'),
-(6, 'Priya Singh', '23JE0210', 'priya.singh@iitism.ac.in', '9876543212', 'Petroleum Engineering'),
-(6, 'Karthik Nair', '21JE0305', 'karthik.nair@iitism.ac.in', '9876543213', 'Mechanical Engineering'),
-(6, 'Ananya Das', '23JE0422', 'ananya.das@iitism.ac.in', '9876543214', 'Electronics Engineering');
+(6, 'Aarav Sharma', '24JE0101', 'aarav.sharma@iitism.ac.in', '9876543210', 'Computer Science & Engineering'),
+(6, 'Rohan Verma', '24JE0145', 'rohan.verma@iitism.ac.in', '9876543211', 'Mining Engineering'),
+(6, 'Priya Singh', '24JE0210', 'priya.singh@iitism.ac.in', '9876543212', 'Petroleum Engineering'),
+(6, 'Karthik Nair', '24JE0305', 'karthik.nair@iitism.ac.in', '9876543213', 'Mechanical Engineering'),
+(6, 'Ananya Das', '24JE0422', 'ananya.das@iitism.ac.in', '9876543214', 'Electronics Engineering');
 
 -- Event 8 (Capacity 4, 4 registrations already - FULL / 0 remaining seats!)
 INSERT INTO `registrations` (`event_id`, `student_name`, `admission_no`, `email`, `phone`, `department`) VALUES
-(8, 'Vikram Malhotra', '21JE0501', 'vikram.m@iitism.ac.in', '9876543220', 'Mining Machinery Engineering'),
-(8, 'Sneha Patel', '22JE0612', 'sneha.p@iitism.ac.in', '9876543221', 'Environmental Science'),
-(8, 'Tanmay Joshi', '22JE0733', 'tanmay.j@iitism.ac.in', '9876543222', 'Applied Geophysics'),
-(8, 'Meera Iyer', '23JE0844', 'meera.i@iitism.ac.in', '9876543223', 'Mathematics & Computing');
+(8, 'Vikram Malhotra', '24JE0501', 'vikram.m@iitism.ac.in', '9876543220', 'Mining Machinery Engineering'),
+(8, 'Sneha Patel', '24JE0612', 'sneha.p@iitism.ac.in', '9876543221', 'Environmental Science'),
+(8, 'Tanmay Joshi', '24JE0733', 'tanmay.j@iitism.ac.in', '9876543222', 'Applied Geophysics'),
+(8, 'Meera Iyer', '24JE0844', 'meera.i@iitism.ac.in', '9876543223', 'Mathematics & Computing');
 
 -- Event 1 (Capacity 30, 2 sample registrations)
 INSERT INTO `registrations` (`event_id`, `student_name`, `admission_no`, `email`, `phone`, `department`) VALUES
-(1, 'Aditya Sen', '22JE0911', 'aditya.sen@iitism.ac.in', '9876543230', 'Chemical Engineering'),
-(1, 'Devika Menon', '23JE0925', 'devika.m@iitism.ac.in', '9876543231', 'Civil Engineering');
+(1, 'Aditya Sen', '24JE0911', 'aditya.sen@iitism.ac.in', '9876543230', 'Chemical Engineering'),
+(1, 'Devika Menon', '24JE0925', 'devika.m@iitism.ac.in', '9876543231', 'Civil Engineering');
 
 -- Event 2 & Event 4 (Sample registrations for Rohit Garg 24JE0917)
 INSERT INTO `registrations` (`event_id`, `student_name`, `admission_no`, `email`, `phone`, `department`) VALUES

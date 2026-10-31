@@ -249,7 +249,7 @@ try {
           <input type="hidden" id="quickCancelEventId">
           <div class="form-group">
             <label for="quickCancelAdmissionNo">Your Admission Number / Roll No <span class="req">*</span></label>
-            <input type="text" class="form-control" id="quickCancelAdmissionNo" placeholder="e.g. 22JE0456" required>
+            <input type="text" class="form-control" id="quickCancelAdmissionNo" placeholder="e.g. 24JE0456" required>
           </div>
 
           <div class="modal-footer">
@@ -275,7 +275,7 @@ try {
       <div class="modal-body">
         <!-- Student Roll No Lookup Bar -->
         <div class="lookup-bar">
-          <input type="text" class="form-control" id="lookupAdmissionNo" value="<?php echo $currentAdmissionNo; ?>" placeholder="Enter Admission Number (e.g. 22JE0101, 24JE0917)">
+          <input type="text" class="form-control" id="lookupAdmissionNo" value="<?php echo $currentAdmissionNo; ?>" placeholder="Enter Admission Number (e.g. 24JE0101, 24JE0917)">
           <button class="btn-primary" id="btnLookupReg" style="white-space: nowrap;">
             <span>🔍</span> Find My Events
           </button>

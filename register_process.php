@@ -41,7 +41,7 @@ $admissionNo = strtoupper($admissionNo);
 
 // Basic format check for IIT (ISM) Admission Number
 if (!preg_match('/^[0-9]{2}[A-Z]{2}[0-9]{4}$/', $admissionNo)) {
-    $msg = "Invalid Admission Number format. Expected: 24JE0917 or 22JE0456.";
+    $msg = "Invalid Admission Number format. Expected: 24JE0917 or 24JE0456.";
     header("Location: register.php?error=" . urlencode($msg));
     exit;
 }

@@ -88,7 +88,7 @@ function setupEventHandlers() {
   $("#btnLookupReg").on("click", function() {
     let admNo = $("#lookupAdmissionNo").val().trim();
     if (!admNo) {
-      showToast("warning", "Admission No Required", "Please enter your Admission Number (e.g. 22JE0456).");
+      showToast("warning", "Admission No Required", "Please enter your Admission Number (e.g. 24JE0456).");
       return;
     }
     fetchMyRegistrations(admNo);
