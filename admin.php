@@ -2,8 +2,8 @@
 // Lab 10: Call session_start() before any output
 session_start();
 
-// Lab 10 Section 7.5: Session guard - only allow logged in admin
-if (empty($_SESSION["isAdmin"])) {
+// Lab 10 Section 7.5: Session guard - checks admissionNo and isAdmin
+if (!isset($_SESSION["admissionNo"]) || empty($_SESSION["isAdmin"])) {
     header("Location: login.php");
     exit;
 }
