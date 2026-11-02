@@ -66,8 +66,9 @@ $success = isset($_GET["success"]) ? trim($_GET["success"]) : "";
         <div class="form-group">
           <label for="admissionNo">Admission / Roll No <span class="req">*</span></label>
 <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            CHEAT SHEET Q49: Support B.Tech, M.Tech, M.Sc, PhD roll numbers
-            HOW TO USE: Replace pattern below with:
+            CHEAT SHEET Q49: Support B.Tech, M.Tech, M.Sc, PhD roll numbers [STEP 1/2]
+            [STEP 1/2] HERE: Replace HTML pattern attribute below with:
+            WHERE TO GO NEXT: [STEP 2/2] is in register_process.php (update PHP preg_match regex)
             pattern="[0-9]{2}(JE|MT|MS|PH|je|mt|ms|ph)[0-9]{4}"
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
           <input
@@ -143,9 +144,10 @@ $success = isset($_GET["success"]) ? trim($_GET["success"]) : "";
         </div>
 
 <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        CHEAT SHEET Q3: Add Hostel residence dropdown field
-        SQL: ALTER TABLE students ADD COLUMN hostel VARCHAR(50) DEFAULT 'Amber';
-        HOW TO USE: Add this form-group before password field below:
+        CHEAT SHEET Q3: Add Hostel residence dropdown field [STEP 2/3]
+        PREVIOUS STEP: [STEP 1/3] SQL: ALTER TABLE students ADD COLUMN hostel VARCHAR(50) DEFAULT 'Amber';
+        [STEP 2/3] HERE: Add this select dropdown before password field below:
+        WHERE TO GO NEXT: [STEP 3/3] is in register_process.php (reads $_POST['studentHostel'] and binds to INSERT)
         <div class="form-group">
           <label for="studentHostel">Hostel Residence <span class="req">*</span></label>
           <select class="form-control" id="studentHostel" name="studentHostel" required>

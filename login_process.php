@@ -59,9 +59,10 @@ try {
      * }
      * $pdo->prepare("UPDATE students SET failed_attempts = 0, locked_until = NULL WHERE admission_no = ?")->execute([$admissionNo]);
      *
-     * CHEAT SHEET Q38: Bind session to User-Agent (Anti Session Hijacking)
-     * HOW TO USE: Add in session setting section below:
+     * CHEAT SHEET Q38: Bind session to User-Agent [STEP 1/2]
+     * [STEP 1/2] HERE: Save User-Agent to session on login:
      * $_SESSION["user_agent"] = $_SERVER["HTTP_USER_AGENT"];
+     * WHERE TO GO NEXT: [STEP 2/2] is in index.php (verify User-Agent matches on every page request)
      * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      */
     // Verify password using password_verify (matches password_hash from registration)
@@ -79,8 +80,9 @@ try {
     $_SESSION["isAdmin"]           = ($student["role"] === "admin");
 
     /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-     * Q31 EXAM TASK: Remember Me cookie (sets 7-day cookie)
-     * HOW TO USE: Uncomment this block right here:
+     * Q31 EXAM TASK: Remember Me cookie [STEP 3/3]
+     * PREVIOUS STEPS: [STEP 1/3 & 2/3] in login.php (checkbox HTML + pre-fill input)
+     * [STEP 3/3] HERE: Uncomment this block to set the 7-day cookie:
      * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      * if (!empty($_POST["rememberMe"])) {
      *     setcookie("remember_adm", $student["admission_no"], time() + (7 * 24 * 3600), "/");
@@ -89,8 +91,10 @@ try {
      * }
      *
      * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-     * Q41 EXAM TASK: Track and store last login timestamp
-     * HOW TO USE: Uncomment this block right here:
+     * Q41 EXAM TASK: Track and store last login timestamp [STEP 2/3]
+     * PREVIOUS STEP: [STEP 1/3] SQL (ALTER TABLE students ADD COLUMN last_login_at DATETIME;)
+     * [STEP 2/3] HERE: Update database & save formatted date to session:
+     * WHERE TO GO NEXT: [STEP 3/3] is in index.php (display in navbar)
      * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      * $pdo->prepare("UPDATE students SET last_login_at = NOW() WHERE admission_no = ?")->execute([$student["admission_no"]]);
      * $_SESSION["lastLoginDisplay"] = date("M d, g:i A");

@@ -23,8 +23,9 @@ if (!isset($_SESSION["admissionNo"])) {
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * CHEAT SHEET Q38: Verify session User-Agent against hijacking
- * HOW TO USE: Add after session guard check:
+ * CHEAT SHEET Q38: Verify session User-Agent against hijacking [STEP 2/2]
+ * PREVIOUS STEP: [STEP 1/2] in login_process.php (stores $_SERVER['HTTP_USER_AGENT'] in session)
+ * [STEP 2/2] HERE: Verify session user_agent on every page load:
  * if (!isset($_SESSION["user_agent"]) || $_SESSION["user_agent"] !== $_SERVER["HTTP_USER_AGENT"]) {
  *     session_unset(); session_destroy(); header("Location: login.php?error=Session+hijack+detected"); exit;
  * }
@@ -95,8 +96,10 @@ try {
       </div>
 
 <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        Q41 EXAM TASK: Display last login time in navbar
-        HOW TO USE: Add this span inside nav-actions:
+        Q41 EXAM TASK: Display last login time in navbar [STEP 3/3]
+        PREVIOUS STEPS: [STEP 1/3] SQL (ALTER TABLE students ADD COLUMN last_login_at DATETIME;)
+        [STEP 2/3] in login_process.php (saves timestamp to session)
+        [STEP 3/3] HERE: Display in navbar:
         <?php if (!empty($_SESSION['lastLoginDisplay'])): ?>
           <span style="font-size:11px;color:#ccc;margin-right:10px;">Last login: <?php echo $_SESSION['lastLoginDisplay']; ?></span>
         <?php endif; ?>
@@ -135,22 +138,22 @@ try {
     </div>
 
     <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      Q20 EXAM TASK: Add live search box to filter event cards
-      HOW TO USE: Add this search input (also see Q20 in app.js):
+      Q20 EXAM TASK: Add live search box to filter event cards [STEP 1/2]
+      WHERE TO GO NEXT: [STEP 2/2] is in assets/js/app.js (inside $(document).ready)
       <div style="margin-bottom:15px;">
         <input type="text" id="eventSearchInput" class="form-control" placeholder="Search events by title or venue..." style="padding:10px;font-size:14px;">
       </div>
       
-      Q19 EXAM TASK: Add sort dropdown for event cards
-      HOW TO USE: Add this select element (also see Q19 in app.js):
+      Q19 EXAM TASK: Add sort dropdown for event cards [STEP 1/2]
+      WHERE TO GO NEXT: [STEP 2/2] is in assets/js/app.js (inside $(document).ready)
       <select id="sortEventsSelect" class="form-control" style="width:200px;margin-bottom:15px;">
         <option value="default">Sort: Default (By Date)</option>
         <option value="seats_asc">Sort: Fewest Seats Left</option>
         <option value="cap_desc">Sort: Highest Capacity</option>
       </select>
       
-      Q27 EXAM TASK: Add category filter pill buttons
-      HOW TO USE: Add these buttons (also see Q27 in app.js):
+      Q27 EXAM TASK: Add category filter pill buttons [STEP 1/2]
+      WHERE TO GO NEXT: [STEP 2/2] is in assets/js/app.js (inside $(document).ready)
       <div style="display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap;">
         <button class="btn-nav active btn-filter" data-cat="all">All</button>
         <button class="btn-nav btn-filter" data-cat="Technical">Technical</button>

@@ -462,8 +462,9 @@ th {
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * Q39 EXAM TASK: Add print-friendly CSS for attendance sheet
- * HOW TO USE: Uncomment this block when asked for print CSS
+ * Q39 EXAM TASK: Add print-friendly CSS for attendance sheet [STEP 2/2]
+ * PREVIOUS STEP: [STEP 1/2] Add button in admin.php: <button onclick="window.print()">Print</button>
+ * [STEP 2/2] HERE: Uncomment this @media print block below:
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * @media print {
  *   .top-bar, .controls-card, .btn-cancel-reg, .btn-secondary, a { display: none !important; }

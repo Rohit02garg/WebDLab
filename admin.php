@@ -43,8 +43,9 @@ if (isset($_GET["delete"])) {
     $delId = intval($_GET["delete"]);
     if ($delId > 0) {
         /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-         * Q14 EXAM TASK: Add Category Dropdown (currently hardcoded as 'Campus')
-         * HOW TO USE: Read category from POST and change the INSERT:
+         * Q14 EXAM TASK: Add Category Dropdown [STEP 1/2]
+         * [STEP 1/2] HERE: Read category from POST and change the INSERT:
+         * WHERE TO GO NEXT: [STEP 2/2] is in the Publish HTML form below (add <select name="category">)
          * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
          * $category = isset($_POST["category"]) ? trim($_POST["category"]) : "Campus";
          * $stmt = $pdo->prepare("INSERT INTO events (title, category, description, date_time, venue, capacity) VALUES (?, ?, ?, ?, ?, ?)");
@@ -58,8 +59,8 @@ if (isset($_GET["delete"])) {
     }
 }
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * Q18 EXAM TASK: Add 'Reset Seats' - clear all registrations for an event
- * HOW TO USE: Uncomment this handler here + add HTML link next to Delete button
+ * Q18 EXAM TASK: Add 'Reset Seats' - clear all registrations for an event [STEP 1/2]
+ * WHERE TO GO NEXT: [STEP 2/2] Add HTML link next to Delete button inside event card (scroll down to line ~250)
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * if (isset($_GET["clear_registrations"])) {
  *     $clrId = intval($_GET["clear_registrations"]);
@@ -92,8 +93,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"]) && $_POST["
     }
 }
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * Q16 EXAM TASK: Allow admin to update event capacity
- * HOW TO USE: Uncomment this handler here + add HTML form inside event card:
+ * Q16 EXAM TASK: Allow admin to update event capacity [STEP 1/2]
+ * [STEP 1/2] HERE: Uncomment this POST handler
+ * WHERE TO GO NEXT: [STEP 2/2] Add HTML form inside each event card (scroll down to line ~280)
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"]) && $_POST["action"] === "update_capacity") {
  *     $evId = intval($_POST["event_id"]);
@@ -231,8 +233,9 @@ try {
         </div>
 
         <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          Q14 EXAM TASK (HTML): Add Category dropdown to Publish form
-          HOW TO USE: Add this form-group before the submit button below:
+          Q14 EXAM TASK (HTML): Add Category dropdown to Publish form [STEP 2/2]
+          PREVIOUS STEP: [STEP 1/2] was the PHP handler above (reads $_POST['category'] and binds it)
+          [STEP 2/2] HERE: Add this form-group before the submit button below:
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           <div class="form-group">
             <label for="category">Event Category <span class="req">*</span></label>
@@ -255,8 +258,9 @@ try {
 
     <!-- 2. Events & Registrants Queue -->
     <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      Q39 EXAM TASK: Add 'Print Attendance Sheet' button
-      HOW TO USE: Add inside events-section-header div:
+      Q39 EXAM TASK: Add 'Print Attendance Sheet' button [STEP 1/2]
+      [STEP 1/2] HERE: Add button inside events-section-header div:
+      WHERE TO GO NEXT: [STEP 2/2] is at the bottom of assets/css/style.css (@media print)
       <button onclick="window.print()" class="btn-secondary" style="font-size:11px;padding:4px 10px;">Print Attendance Sheet</button>
     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
     <div class="events-section-header">
@@ -279,9 +283,11 @@ try {
             </div>
             <div>
               <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-                Q37 EXAM TASK: Add 'Export CSV' button
-                <a href="export_csv.php?event_id=<?php echo $ev['id']; ?>" class="btn-secondary" style="text-decoration:none;display:inline-block;padding:4px 8px;font-size:12px;">Export CSV</a>
-                Q18 EXAM TASK: Add 'Reset Seats' button
+                Q37 EXAM TASK: Add 'Export CSV' button [STEP 2/2]
+                PREVIOUS STEP: [STEP 1/2] Create export_csv.php in project root (code in PRACTICE_ANSWERS.md Q37)
+                [STEP 2/2] HERE: Add button link next to Delete: class="btn-secondary" style="text-decoration:none;display:inline-block;padding:4px 8px;font-size:12px;">Export CSV</a>
+                Q18 EXAM TASK: Add 'Reset Seats' button [STEP 2/2]
+                PREVIOUS STEP: [STEP 1/2] was the PHP GET handler near line 25 above
                 <a href="admin.php?clear_registrations=<?php echo $ev['id']; ?>" onclick="return confirm('Reset all seats?');" class="btn-secondary" style="text-decoration:none;display:inline-block;padding:4px 8px;font-size:12px;">Reset Seats</a>
               ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
               <a href="admin.php?delete=<?php echo $ev["id"]; ?>" 
@@ -320,8 +326,9 @@ try {
           </div>
 
           <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          Q16 EXAM TASK (HTML): Update capacity form inside event card
-          HOW TO USE: Add this form right here after seat-capacity-block:
+          Q16 EXAM TASK (HTML): Update capacity form inside event card [STEP 2/2]
+          PREVIOUS STEP: [STEP 1/2] was the PHP POST handler near line 75 above
+          [STEP 2/2] HERE: Add this form right here after seat-capacity-block:
           <form action="admin.php" method="post" style="display:inline-flex;gap:6px;margin-top:8px;">
             <input type="hidden" name="action" value="update_capacity">
             <input type="hidden" name="event_id" value="<?php echo $ev['id']; ?>">

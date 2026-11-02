@@ -48,8 +48,9 @@ if (!empty($errors)) {
 $admissionNo = strtoupper($admissionNo);
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * CHEAT SHEET Q49: Support M.Tech (MT), M.Sc (MS), PhD (PH) roll numbers
- * HOW TO USE: Replace the admission number preg_match below with:
+ * CHEAT SHEET Q49: Support M.Tech (MT), M.Sc (MS), PhD (PH) roll numbers [STEP 2/2]
+ * PREVIOUS STEP: [STEP 1/2] was in register.php (HTML input pattern)
+ * [STEP 2/2] HERE: Replace the admission number preg_match below with:
  * if (!preg_match('/^[0-9]{2}(JE|MT|MS|PH)[0-9]{4}$/', $admissionNo)) {
  *     header("Location: register.php?error=" . urlencode("Invalid roll format. Expected JE, MT, MS, or PH prefix.")); exit;
  * }
@@ -60,8 +61,10 @@ $admissionNo = strtoupper($admissionNo);
  *     header("Location: register.php?error=" . urlencode("Invalid Mobile Number. Must be 10 digits starting with 6-9.")); exit;
  * }
  *
- * CHEAT SHEET Q3: Save student Hostel Residence in database
- * HOW TO USE: $hostel = isset($_POST["studentHostel"]) ? trim($_POST["studentHostel"]) : "Amber";
+ * CHEAT SHEET Q3: Save student Hostel Residence in database [STEP 3/3]
+ * PREVIOUS STEPS: [STEP 1/3] SQL (ALTER TABLE students ADD COLUMN hostel VARCHAR(50);)
+ * [STEP 2/3] was in register.php (dropdown HTML)
+ * [STEP 3/3] HERE: $hostel = isset($_POST["studentHostel"]) ? trim($_POST["studentHostel"]) : "Amber";
  * Add :hostel => $hostel to the INSERT query execution array.
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  */

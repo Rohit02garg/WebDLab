@@ -57,8 +57,9 @@ $(document).ready(function () {
   });
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   * Q19 EXAM TASK: Sort event cards (by seats / date / capacity)
-   * HOW TO USE: Add this handler inside $(document).ready() + add <select> in index.php
+   * Q19 EXAM TASK: Sort event cards (by seats / date / capacity) [STEP 2/2]
+   * PREVIOUS STEP: [STEP 1/2] Add <select id="sortEventsSelect"> in index.php
+   * [STEP 2/2] HERE: Add this change handler inside $(document).ready():
    * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    * $("#sortEventsSelect").on("change", function () {
    *   var sortMode = $(this).val();
@@ -73,8 +74,9 @@ $(document).ready(function () {
    *   renderEvents(sorted);
    * });
    *
-   * Q20 EXAM TASK: Live search/filter event cards by title or venue
-   * HOW TO USE: Add this handler inside $(document).ready() + add <input id="eventSearchInput"> in index.php
+   * Q20 EXAM TASK: Live search/filter event cards by title or venue [STEP 2/2]
+   * PREVIOUS STEP: [STEP 1/2] Add <input id="eventSearchInput"> in index.php
+   * [STEP 2/2] HERE: Add this keyup handler inside $(document).ready():
    * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    * $("#eventSearchInput").on("keyup", function () {
    *   var searchVal = $(this).val().toLowerCase().trim();
@@ -84,8 +86,9 @@ $(document).ready(function () {
    *   });
    * });
    *
-   * Q27 EXAM TASK: Category filter pill buttons (All/Technical/Cultural/Sports)
-   * HOW TO USE: Add this handler inside $(document).ready() + add filter buttons in index.php
+   * Q27 EXAM TASK: Category filter pill buttons (All/Technical/Cultural/Sports) [STEP 2/2]
+   * PREVIOUS STEP: [STEP 1/2] Add filter buttons in index.php
+   * [STEP 2/2] HERE: Add this click handler inside $(document).ready():
    * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    * $(document).on("click", ".btn-filter", function () {
    *   $(".btn-filter").removeClass("active");
@@ -122,10 +125,10 @@ function loadEvents() {
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * CHEAT SHEET Q46: Fix XSS in event cards via jQuery event delegation
- * HOW TO USE: Replace inline onclick with data-id attributes:
+ * CHEAT SHEET Q46: Fix XSS via jQuery event delegation
+ * [STEP 1/2] HERE in renderEvents(): Replace inline onclick with data-id:
  * <button type="button" class="btn-register btn-open-reg" data-id="' + ev.id + '">Register Now</button>
- * And handle in $(document).ready():
+ * [STEP 2/2] In $(document).ready() above: Add event delegation listener:
  * $(document).on("click", ".btn-open-reg", function() { openRegistrationModal($(this).data("id")); });
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  */
@@ -176,8 +179,8 @@ function renderEvents(events) {
       '<div class="meta-item"><span><strong>Venue:</strong> ' + escapeHtml(ev.venue) + '</span></div>' +
       '</div>' +
       /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       * Q22 EXAM TASK: Add countdown timer element inside meta list
-       * HOW TO USE: Add this line inside event-meta-list (also add setInterval at bottom of file):
+       * Q22 EXAM TASK: Add countdown timer element inside meta list [STEP 1/2]
+       * WHERE TO GO NEXT: [STEP 2/2] is at the VERY BOTTOM of this file (app.js) - setInterval loop
        * '<div class="meta-item"><span class="countdown-timer" data-target="' + ev.date_formatted + '"><strong>Countdown:</strong> Calculating...</span></div>' +
        * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
        */
@@ -419,8 +422,9 @@ function escapeHtml(str) {
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * Q22 EXAM TASK: Countdown timer live ticking loop (ADD at bottom of file)
- * HOW TO USE: Uncomment this setInterval loop:
+ * Q22 EXAM TASK: Countdown timer live ticking loop [STEP 2/2]
+ * PREVIOUS STEP: [STEP 1/2] is in renderEvents() above (adds .countdown-timer DOM element)
+ * [STEP 2/2] HERE: Uncomment this setInterval loop:
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * setInterval(function () {
  *   $(".countdown-timer").each(function () {

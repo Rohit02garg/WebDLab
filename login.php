@@ -86,9 +86,10 @@ $success = isset($_GET["success"]) ? trim($_GET["success"]) : "";
         </div>
 
         <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          Q31 EXAM TASK: Add "Remember Me" checkbox (saves admission no for 7 days)
-          HOW TO USE:
-          1. Add checkbox below:
+          Q31 EXAM TASK: Add "Remember Me" checkbox [STEP 1/3]
+          [STEP 1/3] HERE: Add checkbox below:
+          [STEP 2/3] HERE: Pre-fill admissionNo input above with value="<?php echo htmlspecialchars($_COOKIE['remember_adm'] ?? ''); ?>"
+          WHERE TO GO NEXT: [STEP 3/3] is in login_process.php (setcookie() after login success)
              <div style="margin:10px 0;">
                <label style="font-weight:normal;font-size:13px;">
                  <input type="checkbox" name="rememberMe" value="1" <?php echo isset($_COOKIE['remember_adm']) ? 'checked' : ''; ?>>
