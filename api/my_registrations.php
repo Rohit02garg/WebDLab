@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Lab 8 Section 2: JSON Response
 header("Content-Type: application/json; charset=utf-8");
 
@@ -10,6 +11,13 @@ $admissionNo = isset($_GET["admission_no"]) ? strtoupper(trim($_GET["admission_n
 if ($admissionNo === "") {
     http_response_code(400);
     echo json_encode(["success" => false, "message" => "Please provide an Admission Number."]);
+    exit;
+}
+
+if ($admissionNo !== $_SESSION["admissionNo"])
+{
+    http_response_code(401);
+    echo json_encode(["success" => false, "message" => "Unauthorized"]);
     exit;
 }
 

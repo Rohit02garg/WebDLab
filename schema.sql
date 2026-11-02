@@ -65,13 +65,13 @@ CREATE TABLE `registrations` (
 -- Sample Events for IIT (ISM) Dhanbad
 -- --------------------------------------------------------
 INSERT INTO `events` (`id`, `title`, `category`, `description`, `date_time`, `venue`, `capacity`) VALUES
-(1, 'Srijan 2026: Battle of the Bands', 'Cultural', 'The flagship rock and acoustic band showdown of Eastern India\'s largest cultural festival. Showcase your band\'s musical mastery live on stage.', '2026-11-15 18:00:00', 'Penman Auditorium', 30),
+(1, 'Srijan 2026: Battle of the Bands', 'Cultural', 'The flagship rock and acoustic band showdown of Eastern India''s largest cultural festival. Showcase your band''s musical mastery live on stage.', '2026-11-15 18:00:00', 'Penman Auditorium', 30),
 (2, 'Concetto: Autonomous RoboSoccer', 'Technical', 'High-speed robotic soccer championship organized by RoboISM. Teams build autonomous bots that maneuver, pass, and shoot on a miniaturized turf.', '2026-11-20 10:00:00', 'SAC Indoor Arena', 10),
 (3, 'Khanan: Geo-Mining AI Hackathon', 'Technical', 'Solve real-world resource extraction, subsurface imaging, and mine safety challenges using computer vision, sensor telemetry, and modern AI.', '2026-11-22 09:30:00', 'GJLT Hall 1', 25),
 (4, 'CodeISM Winter Coding Sprint', 'Technical', 'Speed algorithmic problem solving challenge across dynamic programming, graph algorithms, and competitive data structures.', '2026-11-25 14:00:00', 'Computer Centre Lab 3', 20),
 (5, 'Basant: Kavyanjali Poetry Slam', 'Literary', 'A soulful evening celebrating Urdu, Hindi, and English poetry, ghazals, and spoken word recitals alongside esteemed alumni and poets.', '2026-12-01 17:30:00', 'Central Library Audi', 40),
 (6, 'Parakram: Inter-Hostel Badminton Clash', 'Sports', 'Singles and doubles knockout tournament featuring fierce rivalries between campus teams.', '2026-12-05 16:00:00', 'SAC Sports Complex', 6),
-(7, 'Pratibimb: "The Miner\'s Legacy" Play', 'Cultural', 'A gripping theatrical production portraying the poignant history, perseverance, and camaraderie of the Dhanbad coal mining pioneers.', '2026-12-10 19:00:00', 'Penman Auditorium', 50),
+(7, 'Pratibimb: "The Miner''s Legacy" Play', 'Cultural', 'A gripping theatrical production portraying the poignant history, perseverance, and camaraderie of the Dhanbad coal mining pioneers.', '2026-12-10 19:00:00', 'Penman Auditorium', 50),
 (8, 'E-Summit: Angel Pitch Arena', 'Entrepreneurship', 'Early-stage student startups pitch directly to prominent venture capitalists, alumni angels, and startup incubators.', '2026-12-14 11:00:00', 'EDC Seminar Hall', 4);
 
 -- --------------------------------------------------------

@@ -5,11 +5,11 @@
 var currentEvents = [];
 
 // Initialize event handlers once DOM is ready (Lab 8 Section 6.1)
-$(document).ready(function() {
+$(document).ready(function () {
   loadEvents();
 
   // Navigation: My Registrations handler (Lab 8 Section 7.3)
-  $("#navMyRegistrations").on("click", function(e) {
+  $("#navMyRegistrations").on("click", function (e) {
     e.preventDefault();
     var adm = (window.sessionStudent && window.sessionStudent.admissionNo) ? window.sessionStudent.admissionNo : "";
     $("#lookupAdmissionNo").val(adm);
@@ -20,7 +20,7 @@ $(document).ready(function() {
   });
 
   // Lookup button inside My Registrations modal
-  $("#btnLookupReg").on("click", function() {
+  $("#btnLookupReg").on("click", function () {
     var adm = $("#lookupAdmissionNo").val().trim();
     if (adm) {
       fetchMyRegistrations(adm);
@@ -28,29 +28,29 @@ $(document).ready(function() {
   });
 
   // Form submission: Event Registration with fetch POST (Lab 8 Section 5)
-  $("#registrationForm").on("submit", function(e) {
+  $("#registrationForm").on("submit", function (e) {
     e.preventDefault();
     submitRegistration();
   });
 
   // Form submission: Cancel Seat with fetch POST (Lab 8 Section 5)
-  $("#quickCancelForm").on("submit", function(e) {
+  $("#quickCancelForm").on("submit", function (e) {
     e.preventDefault();
     submitQuickCancel();
   });
 
   // Modal close handlers (Lab 8 Section 7.3 & 7.4)
-  $(".modal-close-btn, .btn-modal-close").on("click", function() {
+  $(".modal-close-btn, .btn-modal-close").on("click", function () {
     closeAllModals();
   });
 
-  $(".modal-backdrop").on("click", function(e) {
+  $(".modal-backdrop").on("click", function (e) {
     if ($(e.target).hasClass("modal-backdrop")) {
       closeAllModals();
     }
   });
 
-  $(document).on("keydown", function(e) {
+  $(document).on("keydown", function (e) {
     if (e.key === "Escape") {
       closeAllModals();
     }
@@ -60,19 +60,19 @@ $(document).ready(function() {
 // Lab 8 Section 3: Receiving Data with fetch (GET)
 function loadEvents() {
   fetch("api/get_events.php")
-    .then(function(response) {
+    .then(function (response) {
       if (!response.ok) {
         throw new Error("HTTP " + response.status);
       }
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       if (data.success) {
         currentEvents = data.events;
         renderEvents(data.events);
       }
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log("Could not load events: " + error.message);
     });
 }
@@ -88,36 +88,36 @@ function renderEvents(events) {
     return;
   }
 
-  events.forEach(function(ev) {
+  events.forEach(function (ev) {
     var isFull = ev.remaining_seats <= 0;
     var btnHtml = isFull
       ? '<button type="button" class="btn-register" disabled>Event Full</button>'
       : '<button type="button" class="btn-register" onclick="openRegistrationModal(' + ev.id + ')">Register Now</button>';
 
-    var cardHtml = 
+    var cardHtml =
       '<div class="event-card ' + (isFull ? 'is-full' : '') + '">' +
-        '<div class="card-body">' +
-          '<h3 class="event-title">' + escapeHtml(ev.title) + '</h3>' +
-          '<p class="event-desc">' + escapeHtml(ev.description) + '</p>' +
-          '<div class="event-meta-list">' +
-            '<div class="meta-item"><span><strong>Date:</strong> ' + ev.date_formatted + ' • ' + ev.time_formatted + '</span></div>' +
-            '<div class="meta-item"><span><strong>Venue:</strong> ' + escapeHtml(ev.venue) + '</span></div>' +
-          '</div>' +
-          '<div class="seat-capacity-block">' +
-            '<div class="seat-stats-row">' +
-              '<div class="stat-seat-col"><div class="val">' + ev.capacity + '</div><div class="lbl">Total Capacity</div></div>' +
-              '<div class="stat-seat-col"><div class="val">' + ev.registered_count + '</div><div class="lbl">Registered</div></div>' +
-              '<div class="stat-seat-col highlight-remaining ' + (isFull ? 'full' : '') + '"><div class="val">' + ev.remaining_seats + '</div><div class="lbl">Remaining Seats</div></div>' +
-            '</div>' +
-            '<div class="progress-container">' +
-              '<div class="progress-bar-fill ' + (isFull ? 'full' : '') + '" style="width: ' + ev.percent_filled + '%;"></div>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="card-footer">' +
-          btnHtml +
-          '<button type="button" class="btn-cancel-seat" onclick="openQuickCancelModal(' + ev.id + ', \'' + escapeHtml(ev.title) + '\')">Cancel Seat</button>' +
-        '</div>' +
+      '<div class="card-body">' +
+      '<h3 class="event-title">' + escapeHtml(ev.title) + '</h3>' +
+      '<p class="event-desc">' + escapeHtml(ev.description) + '</p>' +
+      '<div class="event-meta-list">' +
+      '<div class="meta-item"><span><strong>Date:</strong> ' + ev.date_formatted + ' • ' + ev.time_formatted + '</span></div>' +
+      '<div class="meta-item"><span><strong>Venue:</strong> ' + escapeHtml(ev.venue) + '</span></div>' +
+      '</div>' +
+      '<div class="seat-capacity-block">' +
+      '<div class="seat-stats-row">' +
+      '<div class="stat-seat-col"><div class="val">' + ev.capacity + '</div><div class="lbl">Total Capacity</div></div>' +
+      '<div class="stat-seat-col"><div class="val">' + ev.registered_count + '</div><div class="lbl">Registered</div></div>' +
+      '<div class="stat-seat-col highlight-remaining ' + (isFull ? 'full' : '') + '"><div class="val">' + ev.remaining_seats + '</div><div class="lbl">Remaining Seats</div></div>' +
+      '</div>' +
+      '<div class="progress-container">' +
+      '<div class="progress-bar-fill ' + (isFull ? 'full' : '') + '" style="width: ' + ev.percent_filled + '%;"></div>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '<div class="card-footer">' +
+      btnHtml +
+      '<button type="button" class="btn-cancel-seat" onclick="openQuickCancelModal(' + ev.id + ', \'' + escapeHtml(ev.title) + '\')">Cancel Seat</button>' +
+      '</div>' +
       '</div>';
 
     $grid.append(cardHtml);
@@ -126,7 +126,7 @@ function renderEvents(events) {
 
 // Open Registration Modal
 function openRegistrationModal(eventId) {
-  var ev = currentEvents.find(function(e) { return e.id === eventId; });
+  var ev = currentEvents.find(function (e) { return e.id === eventId; });
   if (!ev) return;
 
   $("#regEventId").val(ev.id);
@@ -160,10 +160,10 @@ function submitRegistration() {
     },
     body: JSON.stringify(payload)
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       if (data.success) {
         closeAllModals();
         alert(data.message || "Registration accepted!");
@@ -172,10 +172,10 @@ function submitRegistration() {
         $("#regAlert").text(data.message || "Registration could not be completed.").show();
       }
     })
-    .catch(function(error) {
+    .catch(function (error) {
       $("#regAlert").text("Network or server error. Try again.").show();
     })
-    .finally(function() {
+    .finally(function () {
       $btn.prop("disabled", false).text("Confirm Registration");
     });
 }
@@ -218,10 +218,10 @@ function submitQuickCancel() {
     },
     body: JSON.stringify(payload)
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       if (data.success) {
         closeAllModals();
         alert(data.message || "Registration cancelled.");
@@ -230,10 +230,10 @@ function submitQuickCancel() {
         $("#quickCancelAlert").text(data.message || "Cancellation could not be completed.").show();
       }
     })
-    .catch(function(error) {
+    .catch(function (error) {
       $("#quickCancelAlert").text("Network or server error. Try again.").show();
     })
-    .finally(function() {
+    .finally(function () {
       $btn.prop("disabled", false).text("Confirm Cancellation");
     });
 }
@@ -244,36 +244,36 @@ function fetchMyRegistrations(adm) {
   $list.html('<p style="text-align: center; color: #666;">Loading registrations...</p>');
 
   fetch("api/my_registrations.php?admission_no=" + encodeURIComponent(adm))
-    .then(function(response) {
+    .then(function (response) {
       if (!response.ok) {
         throw new Error("HTTP " + response.status);
       }
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       $list.empty();
       if (!data.success || !data.registrations || data.registrations.length === 0) {
         $list.html('<p style="text-align: center; color: #666;">No active registrations found for ' + escapeHtml(adm) + '.</p>');
         return;
       }
 
-      data.registrations.forEach(function(r) {
-        var itemHtml = 
+      data.registrations.forEach(function (r) {
+        var itemHtml =
           '<div class="reg-card">' +
-            '<div class="reg-info">' +
-              '<h4>' + escapeHtml(r.event_title) + '</h4>' +
-              '<div class="reg-details">' +
-                '<span>' + r.event_date + ' • ' + r.event_time + '</span> | <span>' + escapeHtml(r.venue) + '</span>' +
-              '</div>' +
-            '</div>' +
-            '<div>' +
-              '<button type="button" class="btn-cancel-reg" onclick="cancelRegistration(' + r.event_id + ', \'' + escapeHtml(r.admission_no) + '\')">Cancel Registration</button>' +
-            '</div>' +
+          '<div class="reg-info">' +
+          '<h4>' + escapeHtml(r.event_title) + '</h4>' +
+          '<div class="reg-details">' +
+          '<span>' + r.event_date + ' • ' + r.event_time + '</span> | <span>' + escapeHtml(r.venue) + '</span>' +
+          '</div>' +
+          '</div>' +
+          '<div>' +
+          '<button type="button" class="btn-cancel-reg" onclick="cancelRegistration(' + r.event_id + ', \'' + escapeHtml(r.admission_no) + '\')">Cancel Registration</button>' +
+          '</div>' +
           '</div>';
         $list.append(itemHtml);
       });
     })
-    .catch(function(error) {
+    .catch(function (error) {
       $list.html('<p style="color: red; text-align: center;">Could not load registrations. Try again.</p>');
     });
 }
@@ -294,10 +294,10 @@ function cancelRegistration(eventId, admNo) {
     },
     body: JSON.stringify(payload)
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       if (data.success) {
         alert("Registration cancelled.");
         fetchMyRegistrations(admNo);
@@ -306,7 +306,7 @@ function cancelRegistration(eventId, admNo) {
         alert(data.message || "Failed to cancel.");
       }
     })
-    .catch(function(error) {
+    .catch(function (error) {
       alert("Network error while cancelling.");
     });
 }

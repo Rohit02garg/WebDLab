@@ -96,7 +96,7 @@ try {
     <!-- Events Section Header -->
     <div class="events-section-header">
       <h2>Upcoming Campus Events</h2>
-      <span class="events-count-pill" id="eventsCountPill">8 Available</span>
+      <span class="events-count-pill" id="eventsCountPill"><?php echo count($initialEvents); ?> Available</span>
     </div>
 
     <!-- Events Grid (Updated Dynamically via AJAX) -->
