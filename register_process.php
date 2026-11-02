@@ -47,6 +47,24 @@ if (!empty($errors)) {
 // Normalize Admission Number to uppercase (e.g. 24je0917 -> 24JE0917)
 $admissionNo = strtoupper($admissionNo);
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * CHEAT SHEET Q49: Support M.Tech (MT), M.Sc (MS), PhD (PH) roll numbers
+ * HOW TO USE: Replace the admission number preg_match below with:
+ * if (!preg_match('/^[0-9]{2}(JE|MT|MS|PH)[0-9]{4}$/', $admissionNo)) {
+ *     header("Location: register.php?error=" . urlencode("Invalid roll format. Expected JE, MT, MS, or PH prefix.")); exit;
+ * }
+ *
+ * CHEAT SHEET Q48: Strict 10-digit Indian mobile number regex (starts with 6-9)
+ * HOW TO USE: Add this phone validation check:
+ * if (!preg_match('/^[6-9][0-9]{9}$/', $studentPhone)) {
+ *     header("Location: register.php?error=" . urlencode("Invalid Mobile Number. Must be 10 digits starting with 6-9.")); exit;
+ * }
+ *
+ * CHEAT SHEET Q3: Save student Hostel Residence in database
+ * HOW TO USE: $hostel = isset($_POST["studentHostel"]) ? trim($_POST["studentHostel"]) : "Amber";
+ * Add :hostel => $hostel to the INSERT query execution array.
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
 // Basic format check for IIT (ISM) Admission Number
 if (!preg_match('/^[0-9]{2}[A-Z]{2}[0-9]{4}$/', $admissionNo)) {
     $msg = "Invalid Admission Number format. Expected: 24JE0917 or 24JE0456.";

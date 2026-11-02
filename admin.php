@@ -8,11 +8,36 @@ if (!isset($_SESSION["admissionNo"]) || empty($_SESSION["isAdmin"])) {
     exit;
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * CHEAT SHEET Q50: Protect admin route with secret passcode (?admin_key=iitism2026)
+ * HOW TO USE: Add this gatekeeper check right here:
+ * if (isset($_GET["admin_key"]) && $_GET["admin_key"] === "iitism2026") {
+ *     $_SESSION["admin_verified"] = true;
+ * }
+ * if (empty($_SESSION["admin_verified"])) {
+ *     header("Location: login.php?error=" . urlencode("Admin clearance key required."));
+ *     exit;
+ * }
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
 // Extra Lab Section 6: Include PDO database connection
 require_once "config/db.php";
 
 $msg = isset($_GET["msg"]) ? trim($_GET["msg"]) : "";
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * CHEAT SHEET Q22: Add Event Status Toggle (Active vs Postponed)
+ * SQL: ALTER TABLE events ADD COLUMN is_active TINYINT DEFAULT 1;
+ * HOW TO USE: Add this status toggle handler here:
+ * if (isset($_GET["toggle_status"])) {
+ *     $tId = intval($_GET["toggle_status"]);
+ *     $pdo->query("UPDATE events SET is_active = NOT is_active WHERE id = $tId");
+ *     header("Location: admin.php");
+ *     exit;
+ * }
+ * And add toggle link in card: <a href="admin.php?toggle_status=<?php echo $ev['id']; ?>">Toggle Status</a>
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
 // Handle Delete Event (GET)
 if (isset($_GET["delete"])) {
     $delId = intval($_GET["delete"]);

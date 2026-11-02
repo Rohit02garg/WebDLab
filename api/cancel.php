@@ -51,6 +51,18 @@ if ($eventId <= 0 || $admissionNo === "") {
  */
 
 try {
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * CHEAT SHEET Q45: Fix IDOR vulnerability (Enforce Session Ownership)
+ * HOW TO USE: Override client-provided admission number with authentic session roll:
+ * if (!isset($_SESSION["admissionNo"])) { http_response_code(401); exit; }
+ * $admissionNo = $_SESSION["admissionNo"]; // IDOR Guard
+ *
+ * CHEAT SHEET Q4: Implement Soft Deletes (status = 'cancelled')
+ * SQL: ALTER TABLE registrations ADD COLUMN status ENUM('confirmed', 'cancelled') DEFAULT 'confirmed';
+ * HOW TO USE: In DELETE query below, replace DELETE with:
+ * $stmt = $pdo->prepare("UPDATE registrations SET status = 'cancelled' WHERE event_id = :eid AND admission_no = :adm AND status = 'confirmed'");
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
     // Delete student registration to release the reserved seat
     $stmt = $pdo->prepare("DELETE FROM registrations WHERE event_id = :eid AND admission_no = :adm");
     $stmt->execute([

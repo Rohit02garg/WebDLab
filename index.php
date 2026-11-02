@@ -22,6 +22,14 @@ if (!isset($_SESSION["admissionNo"])) {
     exit;
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * CHEAT SHEET Q38: Verify session User-Agent against hijacking
+ * HOW TO USE: Add after session guard check:
+ * if (!isset($_SESSION["user_agent"]) || $_SESSION["user_agent"] !== $_SERVER["HTTP_USER_AGENT"]) {
+ *     session_unset(); session_destroy(); header("Location: login.php?error=Session+hijack+detected"); exit;
+ * }
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
 // Display user-supplied session values safely (Lab 10 Section 5.2)
 $currentStudentName = htmlspecialchars($_SESSION["studentName"]);
 $currentAdmissionNo = htmlspecialchars($_SESSION["admissionNo"]);

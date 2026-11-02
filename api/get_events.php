@@ -6,6 +6,22 @@ header("Content-Type: application/json; charset=utf-8");
 require_once __DIR__ . "/../config/db.php";
 
 try {
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * CHEAT SHEET Q1: Add organizer column to events
+ * SQL: ALTER TABLE events ADD COLUMN organizer VARCHAR(100) DEFAULT 'Student Gymkhana';
+ * HOW TO USE: Add 'e.organizer,' in SELECT below, and '"organizer" => $ev["organizer"] ?? "Student Gymkhana",' in output array.
+ *
+ * CHEAT SHEET Q41: Add pagination (?page=1&limit=4) to api/get_events.php
+ * HOW TO USE: Replace the query block with:
+ * $page = isset($_GET["page"]) ? max(1, (int)$_GET["page"]) : 1;
+ * $limit = isset($_GET["limit"]) ? max(1, (int)$_GET["limit"]) : 100;
+ * $offset = ($page - 1) * $limit;
+ * $stmt = $pdo->prepare("SELECT e.*, COUNT(r.id) AS registered_count FROM events e LEFT JOIN registrations r ON e.id = r.event_id GROUP BY e.id ORDER BY e.date_time ASC LIMIT ? OFFSET ?");
+ * $stmt->bindValue(1, $limit, PDO::PARAM_INT);
+ * $stmt->bindValue(2, $offset, PDO::PARAM_INT);
+ * $stmt->execute();
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
     // Query events with dynamic registered count and remaining seats
     $stmt = $pdo->query("
         SELECT 

@@ -103,6 +103,17 @@ try {
         exit;
     }
 
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * CHEAT SHEET Q2: Block registration past cutoff deadline
+     * SQL: ALTER TABLE events ADD COLUMN registration_deadline DATETIME DEFAULT '2026-12-31 23:59:59';
+     * HOW TO USE: Add this deadline check right here:
+     * if (!empty($event["registration_deadline"]) && strtotime($event["registration_deadline"]) < time()) {
+     *     http_response_code(400);
+     *     echo json_encode(["success" => false, "message" => "Registration deadline has passed for this event."]);
+     *     exit;
+     * }
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     */
     $capacity = (int) $event["capacity"];
 
     /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -173,6 +184,14 @@ try {
         exit;
     }
 
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * CHEAT SHEET Q42: Generate unique registration ticket reference (TKT-2026-XXXX)
+     * SQL: ALTER TABLE registrations ADD COLUMN ticket_code VARCHAR(30) UNIQUE NULL;
+     * HOW TO USE: Before $stmtInsert, generate code:
+     * $ticketCode = "TKT-2026-" . strtoupper(bin2hex(random_bytes(3)));
+     * Add ticket_code to INSERT query and response JSON.
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     */
     // 4. Insert new registration (Extra Lab Section 7.2)
     $stmtInsert = $pdo->prepare("
         INSERT INTO registrations (event_id, student_name, admission_no, email, phone, department)

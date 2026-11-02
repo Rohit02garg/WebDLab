@@ -121,6 +121,14 @@ function loadEvents() {
     });
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * CHEAT SHEET Q46: Fix XSS in event cards via jQuery event delegation
+ * HOW TO USE: Replace inline onclick with data-id attributes:
+ * <button type="button" class="btn-register btn-open-reg" data-id="' + ev.id + '">Register Now</button>
+ * And handle in $(document).ready():
+ * $(document).on("click", ".btn-open-reg", function() { openRegistrationModal($(this).data("id")); });
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
 // Render event list using jQuery DOM methods
 function renderEvents(events) {
   var $grid = $("#eventsGrid");

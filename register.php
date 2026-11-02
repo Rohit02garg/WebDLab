@@ -65,6 +65,11 @@ $success = isset($_GET["success"]) ? trim($_GET["success"]) : "";
         <!-- Admission No -->
         <div class="form-group">
           <label for="admissionNo">Admission / Roll No <span class="req">*</span></label>
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            CHEAT SHEET Q49: Support B.Tech, M.Tech, M.Sc, PhD roll numbers
+            HOW TO USE: Replace pattern below with:
+            pattern="[0-9]{2}(JE|MT|MS|PH|je|mt|ms|ph)[0-9]{4}"
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
           <input
             type="text"
             class="form-control"
@@ -137,6 +142,20 @@ $success = isset($_GET["success"]) ? trim($_GET["success"]) : "";
           </select>
         </div>
 
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        CHEAT SHEET Q3: Add Hostel residence dropdown field
+        SQL: ALTER TABLE students ADD COLUMN hostel VARCHAR(50) DEFAULT 'Amber';
+        HOW TO USE: Add this form-group before password field below:
+        <div class="form-group">
+          <label for="studentHostel">Hostel Residence <span class="req">*</span></label>
+          <select class="form-control" id="studentHostel" name="studentHostel" required>
+            <option value="Jasper">Jasper Hostel</option>
+            <option value="Amber">Amber Hostel</option>
+            <option value="Diamond">Diamond Hostel</option>
+            <option value="Rosaline">Rosaline Hostel</option>
+          </select>
+        </div>
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
         <!-- Password -->
         <div class="form-group">
           <label for="studentPassword">Set Password <span class="req">*</span></label>

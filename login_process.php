@@ -40,6 +40,30 @@ try {
         exit;
     }
 
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * CHEAT SHEET Q37: Account Lockout after 3 Failed Password Attempts
+     * SQL: ALTER TABLE students ADD COLUMN failed_attempts INT DEFAULT 0, ADD COLUMN locked_until DATETIME NULL;
+     * HOW TO USE: Replace the password_verify() block with:
+     * if ($student["locked_until"] && strtotime($student["locked_until"]) > time()) {
+     *     header("Location: login.php?error=" . urlencode("Account locked for 5 minutes due to 3 failed attempts."));
+     *     exit;
+     * }
+     * if (!password_verify($password, $student["password"])) {
+     *     $fails = $student["failed_attempts"] + 1;
+     *     if ($fails >= 3) {
+     *         $pdo->prepare("UPDATE students SET failed_attempts = 0, locked_until = DATE_ADD(NOW(), INTERVAL 5 MINUTE) WHERE admission_no = ?")->execute([$admissionNo]);
+     *     } else {
+     *         $pdo->prepare("UPDATE students SET failed_attempts = ? WHERE admission_no = ?")->execute([$fails, $admissionNo]);
+     *     }
+     *     header("Location: login.php?error=Incorrect+password"); exit;
+     * }
+     * $pdo->prepare("UPDATE students SET failed_attempts = 0, locked_until = NULL WHERE admission_no = ?")->execute([$admissionNo]);
+     *
+     * CHEAT SHEET Q38: Bind session to User-Agent (Anti Session Hijacking)
+     * HOW TO USE: Add in session setting section below:
+     * $_SESSION["user_agent"] = $_SERVER["HTTP_USER_AGENT"];
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     */
     // Verify password using password_verify (matches password_hash from registration)
     if (!password_verify($password, $student["password"])) {
         header("Location: login.php?error=" . urlencode("Incorrect password. Please try again."));
