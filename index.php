@@ -1,6 +1,20 @@
 <?php
 // Start session for student registration state (Lab 10 Section 6.1)
 session_start();
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Q29 EXAM TASK: Auto-logout after 5 minutes inactivity
+ * HOW TO USE: Uncomment this block right after session_start():
+ * (Test tip: change $timeout = 5; to test in 5 seconds)
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * $timeout = 300; // 5 minutes
+ * if (isset($_SESSION["last_activity"]) && (time() - $_SESSION["last_activity"]) > $timeout) {
+ *     session_unset();
+ *     session_destroy();
+ *     header("Location: login.php?error=" . urlencode("Session expired. Please login again."));
+ *     exit;
+ * }
+ * $_SESSION["last_activity"] = time();
+ */
 
 // Lab 10 Section 7.5: Session guard - if student is not logged in, redirect to login.php
 if (!isset($_SESSION["admissionNo"])) {
@@ -46,6 +60,12 @@ try {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Campus Event Registration Portal for IIT (ISM) Dhanbad. Real-time seat tracking, dynamic registration, and cancellation for campus festivals and technical competitions.">
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    Q6 EXAM TASK: Change browser tab title
+    HOW TO USE: Edit text inside <title> tag below
+    Examples:
+    <title>Student Event Portal — IIT (ISM) Dhanbad</title>
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
   <title>IIT (ISM) Dhanbad - Campus Event Registration Portal</title>
   
   <!-- Custom CSS -->
@@ -66,6 +86,13 @@ try {
         </div>
       </div>
 
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        Q41 EXAM TASK: Display last login time in navbar
+        HOW TO USE: Add this span inside nav-actions:
+        <?php if (!empty($_SESSION['lastLoginDisplay'])): ?>
+          <span style="font-size:11px;color:#ccc;margin-right:10px;">Last login: <?php echo $_SESSION['lastLoginDisplay']; ?></span>
+        <?php endif; ?>
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
       <nav class="nav-actions">
         <button class="btn-nav active" id="navAllEvents">
           Events
@@ -99,6 +126,31 @@ try {
       <span class="events-count-pill" id="eventsCountPill"><?php echo count($initialEvents); ?> Available</span>
     </div>
 
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      Q20 EXAM TASK: Add live search box to filter event cards
+      HOW TO USE: Add this search input (also see Q20 in app.js):
+      <div style="margin-bottom:15px;">
+        <input type="text" id="eventSearchInput" class="form-control" placeholder="Search events by title or venue..." style="padding:10px;font-size:14px;">
+      </div>
+      
+      Q19 EXAM TASK: Add sort dropdown for event cards
+      HOW TO USE: Add this select element (also see Q19 in app.js):
+      <select id="sortEventsSelect" class="form-control" style="width:200px;margin-bottom:15px;">
+        <option value="default">Sort: Default (By Date)</option>
+        <option value="seats_asc">Sort: Fewest Seats Left</option>
+        <option value="cap_desc">Sort: Highest Capacity</option>
+      </select>
+      
+      Q27 EXAM TASK: Add category filter pill buttons
+      HOW TO USE: Add these buttons (also see Q27 in app.js):
+      <div style="display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap;">
+        <button class="btn-nav active btn-filter" data-cat="all">All</button>
+        <button class="btn-nav btn-filter" data-cat="Technical">Technical</button>
+        <button class="btn-nav btn-filter" data-cat="Cultural">Cultural</button>
+        <button class="btn-nav btn-filter" data-cat="Sports">Sports</button>
+        <button class="btn-nav btn-filter" data-cat="Literary">Literary</button>
+      </div>
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
     <!-- Events Grid (Updated Dynamically via AJAX) -->
     <div class="events-grid" id="eventsGrid">
       <?php foreach ($initialEvents as $event): 
@@ -216,6 +268,14 @@ try {
           <input type="hidden" id="regPhone" name="phone" value="<?php echo htmlspecialchars($_SESSION["studentPhone"] ?? ""); ?>">
           <input type="hidden" id="regDepartment" name="department" value="<?php echo htmlspecialchars($_SESSION["studentDepartment"] ?? ""); ?>">
 
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            Q36 EXAM TASK: Add optional 'Teammate Admission No' field in registration modal
+            HOW TO USE: Add this form-group before modal-footer below:
+            <div class="form-group" style="margin-top:10px;">
+              <label for="regPartner">Teammate / Partner Admission No <em style="font-weight:normal;">(Optional)</em></label>
+              <input type="text" class="form-control" id="regPartner" name="partner_admission_no" placeholder="e.g. 24JE0101">
+            </div>
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
           <div class="modal-footer">
             <button type="button" class="btn-secondary btn-modal-close">Cancel</button>
             <button type="submit" class="btn-primary" id="btnSubmitReg">

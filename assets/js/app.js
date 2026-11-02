@@ -55,6 +55,50 @@ $(document).ready(function () {
       closeAllModals();
     }
   });
+
+  /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   * Q19 EXAM TASK: Sort event cards (by seats / date / capacity)
+   * HOW TO USE: Add this handler inside $(document).ready() + add <select> in index.php
+   * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   * $("#sortEventsSelect").on("change", function () {
+   *   var sortMode = $(this).val();
+   *   var sorted = currentEvents.slice();
+   *   if (sortMode === "seats_asc") {
+   *     sorted.sort(function (a, b) { return a.remaining_seats - b.remaining_seats; });
+   *   } else if (sortMode === "cap_desc") {
+   *     sorted.sort(function (a, b) { return b.capacity - a.capacity; });
+   *   } else {
+   *     sorted.sort(function (a, b) { return a.id - b.id; });
+   *   }
+   *   renderEvents(sorted);
+   * });
+   *
+   * Q20 EXAM TASK: Live search/filter event cards by title or venue
+   * HOW TO USE: Add this handler inside $(document).ready() + add <input id="eventSearchInput"> in index.php
+   * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   * $("#eventSearchInput").on("keyup", function () {
+   *   var searchVal = $(this).val().toLowerCase().trim();
+   *   $(".event-card").each(function () {
+   *     var cardText = $(this).text().toLowerCase();
+   *     $(this).toggle(cardText.indexOf(searchVal) > -1);
+   *   });
+   * });
+   *
+   * Q27 EXAM TASK: Category filter pill buttons (All/Technical/Cultural/Sports)
+   * HOW TO USE: Add this handler inside $(document).ready() + add filter buttons in index.php
+   * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   * $(document).on("click", ".btn-filter", function () {
+   *   $(".btn-filter").removeClass("active");
+   *   $(this).addClass("active");
+   *   var cat = $(this).data("cat");
+   *   if (cat === "all") {
+   *     renderEvents(currentEvents);
+   *   } else {
+   *     var filtered = currentEvents.filter(function (e) { return e.category === cat; });
+   *     renderEvents(filtered);
+   *   }
+   * });
+   */
 });
 
 // Lab 8 Section 3: Receiving Data with fetch (GET)
@@ -90,6 +134,18 @@ function renderEvents(events) {
 
   events.forEach(function (ev) {
     var isFull = ev.remaining_seats <= 0;
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * Q28 EXAM TASK: Change 'Register Now' button text
+     * HOW TO USE: In the btnHtml line below, replace 'Register Now' with your text (e.g. 'Book My Seat')
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * Q30 EXAM TASK: Show 'Admin View Only' for admin users
+     * HOW TO USE: Replace the var btnHtml block with:
+     * var isAdmin = window.sessionStudent && window.sessionStudent.isAdmin;
+     * var btnHtml = isFull ? '<button type="button" class="btn-register" disabled>Event Full</button>'
+     *   : isAdmin ? '<button type="button" class="btn-secondary" disabled>Admin View Only</button>'
+     *   : '<button type="button" class="btn-register" onclick="openRegistrationModal(' + ev.id + ')">Register Now</button>';
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     */
     var btnHtml = isFull
       ? '<button type="button" class="btn-register" disabled>Event Full</button>'
       : '<button type="button" class="btn-register" onclick="openRegistrationModal(' + ev.id + ')">Register Now</button>';
@@ -97,12 +153,26 @@ function renderEvents(events) {
     var cardHtml =
       '<div class="event-card ' + (isFull ? 'is-full' : '') + '">' +
       '<div class="card-body">' +
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       * Q21 EXAM TASK: Show 'FILLING FAST!' orange badge when seats <= 2
+       * HOW TO USE: Replace <h3 class="event-title"> line below with:
+       * '<h3 class="event-title">' + escapeHtml(ev.title) +
+       * (ev.remaining_seats > 0 && ev.remaining_seats <= 2 ? '<span style="background:orange;color:white;padding:2px 6px;font-size:11px;font-weight:bold;border-radius:3px;margin-left:8px;">FILLING FAST! Only ' + ev.remaining_seats + ' Left!</span>' : '') +
+       * '</h3>' +
+       * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       */
       '<h3 class="event-title">' + escapeHtml(ev.title) + '</h3>' +
       '<p class="event-desc">' + escapeHtml(ev.description) + '</p>' +
       '<div class="event-meta-list">' +
       '<div class="meta-item"><span><strong>Date:</strong> ' + ev.date_formatted + ' • ' + ev.time_formatted + '</span></div>' +
       '<div class="meta-item"><span><strong>Venue:</strong> ' + escapeHtml(ev.venue) + '</span></div>' +
       '</div>' +
+      /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       * Q22 EXAM TASK: Add countdown timer element inside meta list
+       * HOW TO USE: Add this line inside event-meta-list (also add setInterval at bottom of file):
+       * '<div class="meta-item"><span class="countdown-timer" data-target="' + ev.date_formatted + '"><strong>Countdown:</strong> Calculating...</span></div>' +
+       * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       */
       '<div class="seat-capacity-block">' +
       '<div class="seat-stats-row">' +
       '<div class="stat-seat-col"><div class="val">' + ev.capacity + '</div><div class="lbl">Total Capacity</div></div>' +
@@ -140,6 +210,13 @@ function openRegistrationModal(eventId) {
 
 // Lab 8 Section 5: Sending Data with fetch (POST JSON)
 function submitRegistration() {
+  /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   * Q23 EXAM TASK: Add confirmation popup before booking
+   * HOW TO USE: Add these lines right here before $btn line below:
+   * var evName = $("#modalEventTitle").text();
+   * if (!confirm("Reserve a seat for '" + evName + "'? Your seat will be allocated immediately.")) { return; }
+   * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   */
   var $btn = $("#btnSubmitReg");
   $btn.prop("disabled", true).text("Registering...");
   $("#regAlert").hide();
@@ -332,3 +409,21 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Q22 EXAM TASK: Countdown timer live ticking loop (ADD at bottom of file)
+ * HOW TO USE: Uncomment this setInterval loop:
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * setInterval(function () {
+ *   $(".countdown-timer").each(function () {
+ *     var target = new Date($(this).data("target")).getTime();
+ *     var now = new Date().getTime();
+ *     var diff = target - now;
+ *     if (diff <= 0) { $(this).html("<strong>Event Started!</strong>"); return; }
+ *     var d = Math.floor(diff / (1000 * 60 * 60 * 24));
+ *     var h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+ *     var m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+ *     $(this).html("<strong>Starts in:</strong> " + d + "d " + h + "h " + m + "m");
+ *   });
+ * }, 1000);
+ */

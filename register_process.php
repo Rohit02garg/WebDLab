@@ -60,6 +60,16 @@ $studentEmail = strtolower($studentEmail);
 // Hash the password using PHP built-in password_hash (bcrypt)
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Q10 EXAM TASK: Restrict registration to @iitism.ac.in email only
+ * HOW TO USE: Uncomment this block before the INSERT statement:
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * if (!str_ends_with($studentEmail, "@iitism.ac.in")) {
+ *     header("Location: register.php?error=" . urlencode("Only @iitism.ac.in email addresses are accepted."));
+ *     exit;
+ * }
+ */
+
 // Extra Lab: Insert student into database using PDO prepared statement
 try {
     $stmt = $pdo->prepare("

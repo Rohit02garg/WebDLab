@@ -14,6 +14,14 @@ body {
 
 /* Header & Top Bar */
 .top-bar {
+  /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   * Q1 EXAM TASK: Change navbar/header background color
+   * HOW TO USE: Replace "background: #333;" below with your target color
+   * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   * background: #003366;   ← DARK BLUE (IIT ISM official)
+   * background: #8B0000;   ← DARK RED
+   * background: #004d00;   ← DARK GREEN
+   */
   background: #333;
   color: #fff;
   padding: 10px 15px;
@@ -103,12 +111,30 @@ body {
 }
 
 /* Event Cards (Single Full Width Queue) */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Q24 EXAM TASK: Change card layout from column to 2-column grid
+ * HOW TO USE: Replace the .events-grid block below with:
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * .events-grid {
+ *   display: grid;
+ *   grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+ *   gap: 16px;
+ * }
+ */
 .events-grid {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Q3 EXAM TASK: Change event card border style
+ * HOW TO USE: Add or replace border lines inside .event-card below
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * border-left: 4px solid #003366;   ← BLUE left border
+ * border: 2px solid #003366;        ← FULL blue border
+ * box-shadow: 0 2px 8px rgba(0,0,0,0.15);  ← Card drop shadow
+ */
 .event-card {
   background: #fff;
   border: 1px solid #ccc;
@@ -120,6 +146,15 @@ body {
   background: #fafafa;
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Q5 EXAM TASK: Change event title / description font size
+ * HOW TO USE: Change font-size values in .event-title or .event-desc below
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * .event-title { font-size: 22px; }  ← bigger title
+ * .event-title { font-size: 14px; }  ← smaller title
+ * .event-desc  { font-size: 11px; }  ← smaller description
+ * .event-desc  { font-size: 15px; }  ← bigger description
+ */
 .event-title {
   font-size: 18px;
   margin: 0 0 6px;
@@ -184,6 +219,14 @@ body {
   background: green;
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Q25 EXAM TASK: Change full event progress bar color
+ * HOW TO USE: Replace "background: red;" in .progress-bar-fill.full below
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * background: #ff6600;   ← ORANGE
+ * background: #8B0000;   ← DARK RED
+ * background: purple;    ← PURPLE
+ */
 .progress-bar-fill.full {
   background: red;
 }
@@ -201,6 +244,14 @@ button {
   font-size: 13px;
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Q2 EXAM TASK: Change Register Now / Primary button color
+ * HOW TO USE: Replace "background: #003366" with your target color
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * background: #1a7a1a; border: 1px solid #1a7a1a;  ← GREEN
+ * background: #8B0000; border: 1px solid #8B0000;  ← RED
+ * background: #ff6600; border: 1px solid #ff6600;  ← ORANGE
+ */
 .btn-primary,
 .btn-register {
   background: #003366;
@@ -337,6 +388,13 @@ button {
   background: #ffe6e6;
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Q4 EXAM TASK: Change success message alert color
+ * HOW TO USE: Replace the colors in .modal-alert.success below
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * border-color: #003366; color: #003366; background: #e6eeff;  ← BLUE
+ * border-color: #ff9900; color: #995500; background: #fff8e6;  ← GOLD
+ */
 .modal-alert.success {
   border-color: green;
   color: green;
@@ -402,3 +460,14 @@ th {
     grid-template-columns: 1fr;
   }
 }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Q39 EXAM TASK: Add print-friendly CSS for attendance sheet
+ * HOW TO USE: Uncomment this block when asked for print CSS
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * @media print {
+ *   .top-bar, .controls-card, .btn-cancel-reg, .btn-secondary, a { display: none !important; }
+ *   body { background: #fff; color: #000; }
+ *   .event-card { page-break-inside: avoid; border: 1px solid #333; }
+ * }
+ */

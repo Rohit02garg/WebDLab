@@ -25,6 +25,31 @@ if ($eventId <= 0 || $admissionNo === "") {
     exit;
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Q50 EXAM TASK: Session guard (reject unauthenticated requests)
+ * HOW TO USE: Add right after header() at top of file (around line 3):
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * session_start();
+ * if (!isset($_SESSION["admissionNo"])) {
+ *     http_response_code(401);
+ *     echo json_encode(["success" => false, "message" => "Unauthorized: Please login first."]);
+ *     exit;
+ * }
+ *
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Q11 EXAM TASK: Block cancellations within 2 hours of event start
+ * HOW TO USE: Uncomment/add this block right here:
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * $stmtEv = $pdo->prepare("SELECT e.date_time FROM events e WHERE e.id = ?");
+ * $stmtEv->execute([$eventId]);
+ * $eventDateTime = $stmtEv->fetchColumn();
+ * if ($eventDateTime && (strtotime($eventDateTime) - time()) < (2 * 3600) && strtotime($eventDateTime) > time()) {
+ *     http_response_code(400);
+ *     echo json_encode(["success" => false, "message" => "Late Cancel Policy: Cannot cancel within 2 hours of event start."]);
+ *     exit;
+ * }
+ */
+
 try {
     // Delete student registration to release the reserved seat
     $stmt = $pdo->prepare("DELETE FROM registrations WHERE event_id = :eid AND admission_no = :adm");
@@ -34,12 +59,24 @@ try {
     ]);
 
     if ($stmt->rowCount() > 0) {
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         * Q32 EXAM TASK: Change the cancellation success message text
+         * HOW TO USE: Replace the "message" string below:
+         * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         * "message" => "Your registration has been removed. The seat is now available to others."
+         */
         echo json_encode([
             "success" => true,
             "message" => "Registration cancelled successfully. Your seat has been released!"
         ]);
     } else {
         http_response_code(404);
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         * Q45 EXAM TASK: Add XSS protection to not found message
+         * HOW TO USE: Wrap $admissionNo with htmlspecialchars():
+         * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         * "message" => "No active registration found for " . htmlspecialchars($admissionNo) . " in this event."
+         */
         echo json_encode([
             "success" => false,
             "message" => "No active registration found for " . $admissionNo . " in this event."

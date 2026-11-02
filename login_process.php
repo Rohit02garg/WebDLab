@@ -54,6 +54,25 @@ try {
     $_SESSION["studentDepartment"] = $student["department"];
     $_SESSION["isAdmin"]           = ($student["role"] === "admin");
 
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * Q31 EXAM TASK: Remember Me cookie (sets 7-day cookie)
+     * HOW TO USE: Uncomment this block right here:
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * if (!empty($_POST["rememberMe"])) {
+     *     setcookie("remember_adm", $student["admission_no"], time() + (7 * 24 * 3600), "/");
+     * } else {
+     *     setcookie("remember_adm", "", time() - 3600, "/");
+     * }
+     *
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * Q41 EXAM TASK: Track and store last login timestamp
+     * HOW TO USE: Uncomment this block right here:
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * $pdo->prepare("UPDATE students SET last_login_at = NOW() WHERE admission_no = ?")->execute([$student["admission_no"]]);
+     * $_SESSION["lastLoginDisplay"] = date("M d, g:i A");
+     * NOTE: Run SQL first: ALTER TABLE students ADD COLUMN last_login_at DATETIME NULL;
+     */
+
     // Redirect admin to admin dashboard; students to index.php
     if (!empty($_SESSION["isAdmin"])) {
         header("Location: admin.php");
