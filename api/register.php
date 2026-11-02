@@ -49,7 +49,8 @@ if ($eventId <= 0 || $studentName === "" || $admissionNo === "" || $email === ""
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * Q50 EXAM TASK: Add session guard (reject unauthenticated requests)
- * HOW TO USE: Add right after header() at top of file (around line 3):
+ * 📍 EXACT LOCATION: Paste at line 3, right after header("Content-Type: application/json...");
+ * ⚡ ACTION: Copy the 6 lines below and paste at line 3:
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * session_start();
  * if (!isset($_SESSION["admissionNo"])) {
@@ -60,7 +61,8 @@ if ($eventId <= 0 || $studentName === "" || $admissionNo === "" || $email === ""
  *
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * Q8 EXAM TASK: Add limit: max 3 registrations per student
- * HOW TO USE: Uncomment/add this block right here (before try {}):
+ * 📍 EXACT LOCATION: Paste right below line 35 (between validation exit; } and try {)
+ * ⚡ ACTION: Uncomment the 7 lines below:
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * $stmtTotal = $pdo->prepare("SELECT COUNT(*) FROM registrations WHERE admission_no = ?");
  * $stmtTotal->execute([$admissionNo]);
@@ -72,7 +74,8 @@ if ($eventId <= 0 || $studentName === "" || $admissionNo === "" || $email === ""
  *
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * Q13 EXAM TASK: Restrict specific event to one department only
- * HOW TO USE: Uncomment/add this block right here (before try {}):
+ * 📍 EXACT LOCATION: Paste right below line 35 (between validation exit; } and try {)
+ * ⚡ ACTION: Uncomment the 5 lines below (change eventId and dept as requested):
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * if ($eventId === 4 && $department !== "Computer Science & Engineering") {
  *     http_response_code(403);
@@ -82,7 +85,8 @@ if ($eventId <= 0 || $studentName === "" || $admissionNo === "" || $email === ""
  *
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * Q46 EXAM TASK: Validate phone number must be exactly 10 digits
- * HOW TO USE: Uncomment/add this block right here (before try {}):
+ * 📍 EXACT LOCATION: Paste inside the validation block or right above try { (line ~35)
+ * ⚡ ACTION: Uncomment the 5 lines below:
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * if (!preg_match('/^[0-9]{10}$/', $phone)) {
  *     http_response_code(422);
@@ -106,13 +110,14 @@ try {
     /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      * CHEAT SHEET Q2: Block registration past cutoff deadline
      * SQL: ALTER TABLE events ADD COLUMN registration_deadline DATETIME DEFAULT '2026-12-31 23:59:59';
-     * HOW TO USE: Add this deadline check right here:
+     * 📍 EXACT LOCATION: Paste right after: $event = $stmtEvent->fetch(); (around line 45)
+     * ⚡ ACTION: Uncomment this 6-line block:
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      * if (!empty($event["registration_deadline"]) && strtotime($event["registration_deadline"]) < time()) {
      *     http_response_code(400);
      *     echo json_encode(["success" => false, "message" => "Registration deadline has passed for this event."]);
      *     exit;
      * }
-     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      */
     $capacity = (int) $event["capacity"];
 
@@ -187,10 +192,13 @@ try {
     /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      * CHEAT SHEET Q42: Generate unique registration ticket reference (TKT-2026-XXXX)
      * SQL: ALTER TABLE registrations ADD COLUMN ticket_code VARCHAR(30) UNIQUE NULL;
-     * HOW TO USE: Before $stmtInsert, generate code:
-     * $ticketCode = "TKT-2026-" . strtoupper(bin2hex(random_bytes(3)));
-     * Add ticket_code to INSERT query and response JSON.
+     * 📍 EXACT LOCATION: Directly replace lines 76-94 ($stmtInsert and echo json_encode)
+     * ⚡ ACTION: Use this updated block with ticket_code:
      * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * $ticketCode = "TKT-2026-" . strtoupper(bin2hex(random_bytes(3)));
+     * $stmtInsert = $pdo->prepare("INSERT INTO registrations (event_id, student_name, admission_no, email, phone, department, ticket_code) VALUES (?, ?, ?, ?, ?, ?, ?)");
+     * $stmtInsert->execute([$eventId, $studentName, $admissionNo, $email, $phone, $department, $ticketCode]);
+     * echo json_encode(["success" => true, "ticket_code" => $ticketCode, "message" => "Registration confirmed! Ticket: " . $ticketCode]);
      */
     // 4. Insert new registration (Extra Lab Section 7.2)
     $stmtInsert = $pdo->prepare("

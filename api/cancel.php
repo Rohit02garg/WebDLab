@@ -27,7 +27,8 @@ if ($eventId <= 0 || $admissionNo === "") {
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * Q50 EXAM TASK: Session guard (reject unauthenticated requests)
- * HOW TO USE: Add right after header() at top of file (around line 3):
+ * 📍 EXACT LOCATION: Paste at line 3, right after header("Content-Type: application/json...");
+ * ⚡ ACTION: Copy and paste this 6-line block:
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * session_start();
  * if (!isset($_SESSION["admissionNo"])) {
@@ -38,7 +39,8 @@ if ($eventId <= 0 || $admissionNo === "") {
  *
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * Q11 EXAM TASK: Block cancellations within 2 hours of event start
- * HOW TO USE: Uncomment/add this block right here:
+ * 📍 EXACT LOCATION: Paste right below line 26 (between validation exit; } and try {)
+ * ⚡ ACTION: Uncomment this 9-line block:
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * $stmtEv = $pdo->prepare("SELECT e.date_time FROM events e WHERE e.id = ?");
  * $stmtEv->execute([$eventId]);
@@ -53,15 +55,20 @@ if ($eventId <= 0 || $admissionNo === "") {
 try {
     /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * CHEAT SHEET Q45: Fix IDOR vulnerability (Enforce Session Ownership)
- * HOW TO USE: Override client-provided admission number with authentic session roll:
- * if (!isset($_SESSION["admissionNo"])) { http_response_code(401); exit; }
- * $admissionNo = $_SESSION["admissionNo"]; // IDOR Guard
+ * 📍 EXACT LOCATION: Paste right above $stmt = $pdo->prepare(...) (around line 30)
+ * ⚡ ACTION: Override $admissionNo with authenticated session value:
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * if (!isset($_SESSION["admissionNo"])) { http_response_code(401); echo json_encode(["success"=>false,"message"=>"Login required"]); exit; }
+ * $admissionNo = $_SESSION["admissionNo"]; // IDOR Guard (ignores any spoofed input)
  *
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * CHEAT SHEET Q4: Implement Soft Deletes (status = 'cancelled')
  * SQL: ALTER TABLE registrations ADD COLUMN status ENUM('confirmed', 'cancelled') DEFAULT 'confirmed';
- * HOW TO USE: In DELETE query below, replace DELETE with:
- * $stmt = $pdo->prepare("UPDATE registrations SET status = 'cancelled' WHERE event_id = :eid AND admission_no = :adm AND status = 'confirmed'");
+ * 📍 EXACT LOCATION: Replace lines 30-34 ($stmt prepare and execute) with this:
+ * ⚡ ACTION: Replace DELETE statement with UPDATE:
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * $stmt = $pdo->prepare("UPDATE registrations SET status = 'cancelled' WHERE event_id = :eid AND admission_no = :adm AND status = 'confirmed'");
+ * $stmt->execute([":eid" => $eventId, ":adm" => $admissionNo]);
  */
     // Delete student registration to release the reserved seat
     $stmt = $pdo->prepare("DELETE FROM registrations WHERE event_id = :eid AND admission_no = :adm");

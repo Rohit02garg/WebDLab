@@ -10,15 +10,16 @@ if (!isset($_SESSION["admissionNo"]) || empty($_SESSION["isAdmin"])) {
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * CHEAT SHEET Q50: Protect admin route with secret passcode (?admin_key=iitism2026)
- * HOW TO USE: Add this gatekeeper check right here:
+ * 📍 EXACT LOCATION: Paste at line 9 (right after session guard: if (!isset($_SESSION["admissionNo"]) ... exit; })
+ * ⚡ ACTION: Uncomment this 9-line gatekeeper block:
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * if (isset($_GET["admin_key"]) && $_GET["admin_key"] === "iitism2026") {
  *     $_SESSION["admin_verified"] = true;
  * }
  * if (empty($_SESSION["admin_verified"])) {
- *     header("Location: login.php?error=" . urlencode("Admin clearance key required."));
+ *     header("Location: login.php?error=" . urlencode("Admin clearance key required to view dashboard."));
  *     exit;
  * }
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  */
 // Extra Lab Section 6: Include PDO database connection
 require_once "config/db.php";
@@ -28,15 +29,18 @@ $msg = isset($_GET["msg"]) ? trim($_GET["msg"]) : "";
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * CHEAT SHEET Q22: Add Event Status Toggle (Active vs Postponed)
  * SQL: ALTER TABLE events ADD COLUMN is_active TINYINT DEFAULT 1;
- * HOW TO USE: Add this status toggle handler here:
+ * 📍 EXACT LOCATION:
+ *   1. PHP HANDLER: Paste right above line 28 (before // Handle Delete Event (GET))
+ *   2. HTML LINK: Inside event card next to Delete button (line ~295), add:
+ *      <a href="admin.php?toggle_status=<?php echo $ev['id']; ?>" class="btn-secondary" style="font-size:12px;padding:4px 8px;">Toggle Status</a>
+ * ⚡ ACTION: Uncomment this 7-line handler:
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * if (isset($_GET["toggle_status"])) {
  *     $tId = intval($_GET["toggle_status"]);
  *     $pdo->query("UPDATE events SET is_active = NOT is_active WHERE id = $tId");
  *     header("Location: admin.php");
  *     exit;
  * }
- * And add toggle link in card: <a href="admin.php?toggle_status=<?php echo $ev['id']; ?>">Toggle Status</a>
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  */
 // Handle Delete Event (GET)
 if (isset($_GET["delete"])) {
