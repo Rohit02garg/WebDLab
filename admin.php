@@ -4,8 +4,8 @@ session_start();
 
 // Lab 10 Section 7.5: Session guard - checks admissionNo and isAdmin
 if (!isset($_SESSION["admissionNo"]) || empty($_SESSION["isAdmin"])) {
-    header("Location: login.php");
-    exit;
+  header("Location: login.php");
+  exit;
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -44,23 +44,13 @@ $msg = isset($_GET["msg"]) ? trim($_GET["msg"]) : "";
  */
 // Handle Delete Event (GET)
 if (isset($_GET["delete"])) {
-    $delId = intval($_GET["delete"]);
-    if ($delId > 0) {
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-         * Q14 EXAM TASK: Add Category Dropdown [STEP 1/2]
-         * [STEP 1/2] HERE: Read category from POST and change the INSERT:
-         * WHERE TO GO NEXT: [STEP 2/2] is in the Publish HTML form below (add <select name="category">)
-         * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-         * $category = isset($_POST["category"]) ? trim($_POST["category"]) : "Campus";
-         * $stmt = $pdo->prepare("INSERT INTO events (title, category, description, date_time, venue, capacity) VALUES (?, ?, ?, ?, ?, ?)");
-         * $stmt->execute([$title, $category, $desc, $dateTime, $venue, $capacity]);
-         * (Also add <select name="category"> in HTML form below)
-         */
-        $stmt = $pdo->prepare("DELETE FROM events WHERE id = ?");
-        $stmt->execute([$delId]);
-        header("Location: admin.php?msg=deleted");
-        exit;
-    }
+  $delId = intval($_GET["delete"]);
+  if ($delId > 0) {
+    $stmt = $pdo->prepare("DELETE FROM events WHERE id = ?");
+    $stmt->execute([$delId]);
+    header("Location: admin.php?msg=deleted");
+    exit;
+  }
 }
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * Q18 EXAM TASK: Add 'Reset Seats' - clear all registrations for an event [STEP 1/2]
@@ -77,46 +67,31 @@ if (isset($_GET["delete"])) {
 
 // Handle Publish Event (POST)
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"]) && $_POST["action"] === "publish") {
-    $title    = isset($_POST["title"])       ? trim($_POST["title"])       : "";
-    $desc     = isset($_POST["description"]) ? trim($_POST["description"]) : "";
-    $dateTime = isset($_POST["date_time"])   ? trim($_POST["date_time"])   : "";
-    $venue    = isset($_POST["venue"])       ? trim($_POST["venue"])       : "";
-    $capacity = isset($_POST["capacity"])    ? intval($_POST["capacity"])  : 0;
+  $title    = isset($_POST["title"])       ? trim($_POST["title"])       : "";
+  $category = isset($_POST["category"])   ? trim($_POST["category"])    : "Campus";
+  $desc     = isset($_POST["description"]) ? trim($_POST["description"]) : "";
+  $dateTime = isset($_POST["date_time"])   ? trim($_POST["date_time"])   : "";
+  $venue    = isset($_POST["venue"])       ? trim($_POST["venue"])       : "";
+  $capacity = isset($_POST["capacity"])    ? intval($_POST["capacity"])  : 0;
 
-    if ($title !== "" && $desc !== "" && $dateTime !== "" && $venue !== "" && $capacity > 0) {
-        $stmt = $pdo->prepare("
+  if ($title !== "" && $desc !== "" && $dateTime !== "" && $venue !== "" && $capacity > 0) {
+    $stmt = $pdo->prepare("
             INSERT INTO events (title, category, description, date_time, venue, capacity)
-            VALUES (?, 'Campus', ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?)
         ");
-        $stmt->execute([$title, $desc, $dateTime, $venue, $capacity]);
-        header("Location: admin.php?msg=published");
-        exit;
-    } else {
-        header("Location: admin.php?msg=error");
-        exit;
-    }
+    $stmt->execute([$title, $category, $desc, $dateTime, $venue, $capacity]);
+    header("Location: admin.php?msg=published");
+    exit;
+  } else {
+    header("Location: admin.php?msg=error");
+    exit;
+  }
 }
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * Q16 EXAM TASK: Allow admin to update event capacity [STEP 1/2]
- * [STEP 1/2] HERE: Uncomment this POST handler
- * WHERE TO GO NEXT: [STEP 2/2] Add HTML form inside each event card (scroll down to line ~280)
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["action"]) && $_POST["action"] === "update_capacity") {
- *     $evId = intval($_POST["event_id"]);
- *     $newCap = intval($_POST["new_capacity"]);
- *     if ($evId > 0 && $newCap > 0) {
- *         $stmt = $pdo->prepare("UPDATE events SET capacity = ? WHERE id = ?");
- *         $stmt->execute([$newCap, $evId]);
- *         header("Location: admin.php?msg=updated");
- *         exit;
- *     }
- * }
- */
 
 // Query all events and their registration counts
 $events = [];
 try {
-    $stmt = $pdo->query("
+  $stmt = $pdo->query("
         SELECT 
             e.id, e.title, e.description, e.date_time, e.venue, e.capacity,
             COUNT(r.id) AS registered_count,
@@ -126,35 +101,37 @@ try {
         GROUP BY e.id
         ORDER BY e.date_time ASC
     ");
-    $events = $stmt->fetchAll();
+  $events = $stmt->fetchAll();
 } catch (Exception $e) {
-    $events = [];
+  $events = [];
 }
 
 // Query all registrants
 $registrantsByEvent = [];
 try {
-    $stmtReg = $pdo->query("
+  $stmtReg = $pdo->query("
         SELECT event_id, student_name, admission_no, email, phone, department, registered_at
         FROM registrations
         ORDER BY registered_at ASC
     ");
-    $allRegs = $stmtReg->fetchAll();
-    foreach ($allRegs as $row) {
-        $registrantsByEvent[$row["event_id"]][] = $row;
-    }
+  $allRegs = $stmtReg->fetchAll();
+  foreach ($allRegs as $row) {
+    $registrantsByEvent[$row["event_id"]][] = $row;
+  }
 } catch (Exception $e) {
-    $registrantsByEvent = [];
+  $registrantsByEvent = [];
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - IIT (ISM) Dhanbad</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
+
 <body>
 
   <!-- Top Institutional Bar -->
@@ -203,7 +180,8 @@ try {
 
         <div class="form-group">
           <label for="title">Event Title <span class="req">*</span></label>
-          <input type="text" class="form-control" id="title" name="title" placeholder="e.g. Concetto: AI Hackathon" required>
+          <input type="text" class="form-control" id="title" name="title" placeholder="e.g. Concetto: AI Hackathon"
+            required>
         </div>
 
         <div class="form-group">
@@ -217,7 +195,8 @@ try {
             oninput="$('#charCount').text(300 - this.value.length + ' chars remaining')" required></textarea>
   <small id="charCount" style="color:#666;">300 chars remaining</small>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-          <textarea class="form-control" id="description" name="description" rows="2" placeholder="Brief details about the event..." required></textarea>
+          <textarea class="form-control" id="description" name="description" rows="2"
+            placeholder="Brief details about the event..." required></textarea>
         </div>
 
         <div class="form-row-2">
@@ -227,31 +206,27 @@ try {
           </div>
           <div class="form-group">
             <label for="venue">Venue <span class="req">*</span></label>
-            <input type="text" class="form-control" id="venue" name="venue" placeholder="e.g. Penman Auditorium, SAC" required>
+            <input type="text" class="form-control" id="venue" name="venue" placeholder="e.g. Penman Auditorium, SAC"
+              required>
           </div>
         </div>
 
         <div class="form-group">
           <label for="capacity">Total Seat Capacity <span class="req">*</span></label>
-          <input type="number" class="form-control" id="capacity" name="capacity" min="1" max="1000" placeholder="e.g. 50" required>
+          <input type="number" class="form-control" id="capacity" name="capacity" min="1" max="1000"
+            placeholder="e.g. 50" required>
         </div>
 
-        <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          Q14 EXAM TASK (HTML): Add Category dropdown to Publish form [STEP 2/2]
-          PREVIOUS STEP: [STEP 1/2] was the PHP handler above (reads $_POST['category'] and binds it)
-          [STEP 2/2] HERE: Add this form-group before the submit button below:
-          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          <div class="form-group">
-            <label for="category">Event Category <span class="req">*</span></label>
-            <select class="form-control" id="category" name="category" required>
-              <option value="Technical">Technical</option>
-              <option value="Cultural">Cultural</option>
-              <option value="Sports">Sports</option>
-              <option value="Literary">Literary</option>
-              <option value="Campus">Campus (General)</option>
-            </select>
-          </div>
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+        <div class="form-group">
+          <label for="category">Event Category <span class="req">*</span></label>
+          <select class="form-control" id="category" name="category" required>
+            <option value="Technical">Technical</option>
+            <option value="Cultural">Cultural</option>
+            <option value="Sports">Sports</option>
+            <option value="Literary">Literary</option>
+            <option value="Campus">Campus (General)</option>
+          </select>
+        </div>
         <div style="margin-top: 10px;">
           <button type="submit" class="btn-primary" style="padding: 6px 14px;">
             Publish Event
@@ -275,18 +250,18 @@ try {
       <?php if (empty($events)): ?>
         <p style="color: #666;">No campus events published yet.</p>
       <?php else: ?>
-        <?php foreach ($events as $ev): 
+        <?php foreach ($events as $ev):
           $dt = new DateTime($ev["date_time"]);
           $evRegistrants = $registrantsByEvent[$ev["id"]] ?? [];
-        ?>
-        <div class="event-card" id="admin-event-<?php echo $ev["id"]; ?>">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
-            <div>
-              <h3 class="event-title"><?php echo htmlspecialchars($ev["title"]); ?></h3>
-              <p class="event-desc"><?php echo htmlspecialchars($ev["description"]); ?></p>
-            </div>
-            <div>
-              <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          ?>
+          <div class="event-card" id="admin-event-<?php echo $ev["id"]; ?>">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+              <div>
+                <h3 class="event-title"><?php echo htmlspecialchars($ev["title"]); ?></h3>
+                <p class="event-desc"><?php echo htmlspecialchars($ev["description"]); ?></p>
+              </div>
+              <div>
+                <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
                 Q37 EXAM TASK: Add 'Export CSV' button [STEP 2/2]
                 PREVIOUS STEP: [STEP 1/2] Create export_csv.php in project root (code in PRACTICE_ANSWERS.md Q37)
                 [STEP 2/2] HERE: Add button link next to Delete: class="btn-secondary" style="text-decoration:none;display:inline-block;padding:4px 8px;font-size:12px;">Export CSV</a>
@@ -294,42 +269,42 @@ try {
                 PREVIOUS STEP: [STEP 1/2] was the PHP GET handler near line 25 above
                 <a href="admin.php?clear_registrations=<?php echo $ev['id']; ?>" onclick="return confirm('Reset all seats?');" class="btn-secondary" style="text-decoration:none;display:inline-block;padding:4px 8px;font-size:12px;">Reset Seats</a>
               ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-              <a href="admin.php?delete=<?php echo $ev["id"]; ?>" 
-                 onclick="return confirm('Are you sure you want to delete this event? All its registrations will be deleted too.');"
-                 class="btn-cancel-reg" 
-                 style="text-decoration: none; display: inline-block; padding: 4px 10px; font-size: 12px; white-space: nowrap;">
-                Delete
-              </a>
-            </div>
-          </div>
-
-          <div class="event-meta-list">
-            <div class="meta-item">
-              <span><strong>Date:</strong> <?php echo $dt->format("M d, Y • h:i A"); ?></span>
-            </div>
-            <div class="meta-item">
-              <span><strong>Venue:</strong> <?php echo htmlspecialchars($ev["venue"]); ?></span>
-            </div>
-          </div>
-
-          <div class="seat-capacity-block">
-            <div class="seat-stats-row">
-              <div class="stat-seat-col">
-                <div class="val"><?php echo intval($ev["capacity"]); ?></div>
-                <div class="lbl">Total Capacity</div>
-              </div>
-              <div class="stat-seat-col">
-                <div class="val"><?php echo intval($ev["registered_count"]); ?></div>
-                <div class="lbl">Registered</div>
-              </div>
-              <div class="stat-seat-col highlight-remaining">
-                <div class="val"><?php echo max(0, intval($ev["remaining_seats"])); ?></div>
-                <div class="lbl">Remaining Seats</div>
+                <a href="admin.php?delete=<?php echo $ev["id"]; ?>"
+                  onclick="return confirm('Are you sure you want to delete this event? All its registrations will be deleted too.');"
+                  class="btn-cancel-reg"
+                  style="text-decoration: none; display: inline-block; padding: 4px 10px; font-size: 12px; white-space: nowrap;">
+                  Delete
+                </a>
               </div>
             </div>
-          </div>
 
-          <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            <div class="event-meta-list">
+              <div class="meta-item">
+                <span><strong>Date:</strong> <?php echo $dt->format("M d, Y • h:i A"); ?></span>
+              </div>
+              <div class="meta-item">
+                <span><strong>Venue:</strong> <?php echo htmlspecialchars($ev["venue"]); ?></span>
+              </div>
+            </div>
+
+            <div class="seat-capacity-block">
+              <div class="seat-stats-row">
+                <div class="stat-seat-col">
+                  <div class="val"><?php echo intval($ev["capacity"]); ?></div>
+                  <div class="lbl">Total Capacity</div>
+                </div>
+                <div class="stat-seat-col">
+                  <div class="val"><?php echo intval($ev["registered_count"]); ?></div>
+                  <div class="lbl">Registered</div>
+                </div>
+                <div class="stat-seat-col highlight-remaining">
+                  <div class="val"><?php echo max(0, intval($ev["remaining_seats"])); ?></div>
+                  <div class="lbl">Remaining Seats</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           Q16 EXAM TASK (HTML): Update capacity form inside event card [STEP 2/2]
           PREVIOUS STEP: [STEP 1/2] was the PHP POST handler near line 75 above
           [STEP 2/2] HERE: Add this form right here after seat-capacity-block:
@@ -340,18 +315,22 @@ try {
             <button type="submit" class="btn-secondary" style="padding:2px 8px;font-size:11px;">Update Capacity</button>
           </form>
         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-          <!-- 3. Registrants View -->
-          <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            <!-- 3. Registrants View -->
+            <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
             Q38 EXAM TASK: Show department-wise breakdown under each event
             HOW TO USE: Add this PHP block after Registrants count line:
             <?php
-              $deptCounts = [];
-              foreach ($evRegistrants as $reg) { $deptCounts[$reg['department']] = ($deptCounts[$reg['department']] ?? 0) + 1; }
+            $deptCounts = [];
+            foreach ($evRegistrants as $reg) {
+              $deptCounts[$reg['department']] = ($deptCounts[$reg['department']] ?? 0) + 1;
+            }
             ?>
             <?php if (!empty($deptCounts)): ?>
             <div style="font-size:11px;color:#555;margin:4px 0 8px;">
               <strong>Dept Breakdown: </strong>
-              <?php foreach ($deptCounts as $dept => $c): echo htmlspecialchars($dept) . ': <strong>' . $c . '</strong> | '; endforeach; ?>
+              <?php foreach ($deptCounts as $dept => $c):
+                echo htmlspecialchars($dept) . ': <strong>' . $c . '</strong> | ';
+              endforeach; ?>
             </div>
             <?php endif; ?>
             Q17 EXAM TASK: Add live search/filter above registrants table
@@ -360,41 +339,41 @@ try {
                    onkeyup="var v=this.value.toLowerCase();$(this).next('table').find('tbody tr').filter(function(){$(this).toggle($(this).text().toLowerCase().indexOf(v)>-1);});"
                    style="width:100%;padding:4px;font-size:11px;margin-bottom:4px;border:1px solid #ccc;">
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-          <div style="margin-top: 10px; border-top: 1px solid #eee; padding-top: 8px;">
-            <strong style="font-size: 13px;">Registrants (<?php echo count($evRegistrants); ?>):</strong>
-            <?php if (empty($evRegistrants)): ?>
-              <p style="font-size: 12px; color: #777; margin: 4px 0 0;">No students registered for this event yet.</p>
-            <?php else: ?>
-              <table style="width: 100%; font-size: 12px; margin-top: 6px; border-collapse: collapse;">
-                <thead>
-                  <tr style="background: #f5f5f5; text-align: left; border-bottom: 1px solid #ddd;">
-                    <th style="padding: 4px;">#</th>
-                    <th style="padding: 4px;">Admission No</th>
-                    <th style="padding: 4px;">Student Name</th>
-                    <th style="padding: 4px;">Email</th>
-                    <th style="padding: 4px;">Department</th>
-                    <th style="padding: 4px;">Registered At</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php foreach ($evRegistrants as $idx => $r): 
-                    $rDt = new DateTime($r["registered_at"]);
-                  ?>
-                  <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 4px;"><?php echo ($idx + 1); ?></td>
-                    <td style="padding: 4px; font-weight: bold;"><?php echo htmlspecialchars($r["admission_no"]); ?></td>
-                    <td style="padding: 4px;"><?php echo htmlspecialchars($r["student_name"]); ?></td>
-                    <td style="padding: 4px;"><?php echo htmlspecialchars($r["email"]); ?></td>
-                    <td style="padding: 4px;"><?php echo htmlspecialchars($r["department"]); ?></td>
-                    <td style="padding: 4px; color: #666;"><?php echo $rDt->format("M d, h:i A"); ?></td>
-                  </tr>
-                  <?php endforeach; ?>
-                </tbody>
-              </table>
-            <?php endif; ?>
-          </div>
+            <div style="margin-top: 10px; border-top: 1px solid #eee; padding-top: 8px;">
+              <strong style="font-size: 13px;">Registrants (<?php echo count($evRegistrants); ?>):</strong>
+              <?php if (empty($evRegistrants)): ?>
+                <p style="font-size: 12px; color: #777; margin: 4px 0 0;">No students registered for this event yet.</p>
+              <?php else: ?>
+                <table style="width: 100%; font-size: 12px; margin-top: 6px; border-collapse: collapse;">
+                  <thead>
+                    <tr style="background: #f5f5f5; text-align: left; border-bottom: 1px solid #ddd;">
+                      <th style="padding: 4px;">#</th>
+                      <th style="padding: 4px;">Admission No</th>
+                      <th style="padding: 4px;">Student Name</th>
+                      <th style="padding: 4px;">Email</th>
+                      <th style="padding: 4px;">Department</th>
+                      <th style="padding: 4px;">Registered At</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($evRegistrants as $idx => $r):
+                      $rDt = new DateTime($r["registered_at"]);
+                      ?>
+                      <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 4px;"><?php echo ($idx + 1); ?></td>
+                        <td style="padding: 4px; font-weight: bold;"><?php echo htmlspecialchars($r["admission_no"]); ?></td>
+                        <td style="padding: 4px;"><?php echo htmlspecialchars($r["student_name"]); ?></td>
+                        <td style="padding: 4px;"><?php echo htmlspecialchars($r["email"]); ?></td>
+                        <td style="padding: 4px;"><?php echo htmlspecialchars($r["department"]); ?></td>
+                        <td style="padding: 4px; color: #666;"><?php echo $rDt->format("M d, h:i A"); ?></td>
+                      </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
+              <?php endif; ?>
+            </div>
 
-        </div>
+          </div>
         <?php endforeach; ?>
       <?php endif; ?>
     </div>
@@ -404,5 +383,5 @@ try {
   <script src="assets/js/jquery.min.js"></script>
 
 </body>
-</html>
 
+</html>

@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Lab 8 Section 2: JSON Response
 header("Content-Type: application/json; charset=utf-8");
 
@@ -17,7 +18,7 @@ if (!is_array($input)) {
 }
 
 $eventId = isset($input["event_id"]) ? (int) $input["event_id"] : 0;
-$admissionNo = isset($input["admission_no"]) ? strtoupper(trim($input["admission_no"])) : "";
+$admissionNo = isset($input["admission_no"]) ? strtoupper(trim($input["admission_no"])) : (isset($_SESSION["admissionNo"]) ? $_SESSION["admissionNo"] : "");
 
 if ($eventId <= 0 || $admissionNo === "") {
     http_response_code(422);
@@ -54,22 +55,22 @@ if ($eventId <= 0 || $admissionNo === "") {
 
 try {
     /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * CHEAT SHEET Q45: Fix IDOR vulnerability (Enforce Session Ownership)
- * 📍 EXACT LOCATION: Paste right above $stmt = $pdo->prepare(...) (around line 30)
- * ⚡ ACTION: Override $admissionNo with authenticated session value:
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * if (!isset($_SESSION["admissionNo"])) { http_response_code(401); echo json_encode(["success"=>false,"message"=>"Login required"]); exit; }
- * $admissionNo = $_SESSION["admissionNo"]; // IDOR Guard (ignores any spoofed input)
- *
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * CHEAT SHEET Q4: Implement Soft Deletes (status = 'cancelled')
- * SQL: ALTER TABLE registrations ADD COLUMN status ENUM('confirmed', 'cancelled') DEFAULT 'confirmed';
- * 📍 EXACT LOCATION: Replace lines 30-34 ($stmt prepare and execute) with this:
- * ⚡ ACTION: Replace DELETE statement with UPDATE:
- * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- * $stmt = $pdo->prepare("UPDATE registrations SET status = 'cancelled' WHERE event_id = :eid AND admission_no = :adm AND status = 'confirmed'");
- * $stmt->execute([":eid" => $eventId, ":adm" => $admissionNo]);
- */
+     * CHEAT SHEET Q45: Fix IDOR vulnerability (Enforce Session Ownership)
+     * 📍 EXACT LOCATION: Paste right above $stmt = $pdo->prepare(...) (around line 30)
+     * ⚡ ACTION: Override $admissionNo with authenticated session value:
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * if (!isset($_SESSION["admissionNo"])) { http_response_code(401); echo json_encode(["success"=>false,"message"=>"Login required"]); exit; }
+     * $admissionNo = $_SESSION["admissionNo"]; // IDOR Guard (ignores any spoofed input)
+     *
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * CHEAT SHEET Q4: Implement Soft Deletes (status = 'cancelled')
+     * SQL: ALTER TABLE registrations ADD COLUMN status ENUM('confirmed', 'cancelled') DEFAULT 'confirmed';
+     * 📍 EXACT LOCATION: Replace lines 30-34 ($stmt prepare and execute) with this:
+     * ⚡ ACTION: Replace DELETE statement with UPDATE:
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     * $stmt = $pdo->prepare("UPDATE registrations SET status = 'cancelled' WHERE event_id = :eid AND admission_no = :adm AND status = 'confirmed'");
+     * $stmt->execute([":eid" => $eventId, ":adm" => $admissionNo]);
+     */
     // Delete student registration to release the reserved seat
     $stmt = $pdo->prepare("DELETE FROM registrations WHERE event_id = :eid AND admission_no = :adm");
     $stmt->execute([
